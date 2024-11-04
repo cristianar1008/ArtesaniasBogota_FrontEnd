@@ -1,21 +1,26 @@
 import { useState } from 'react'
 import './App.css'
 import logo from './assets/logo.png'
+import productoPrueba from './assets/productoPrueba.jpg'
+import icon from './assets/icono.png'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFacebookF, faInstagram } from '@fortawesome/free-brands-svg-icons';
+import { faUser, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-    <div class="navbar">
-        <div class="social-icons">
-            <i class="fab fa-facebook-f"></i>
-            <i class="fab fa-instagram"></i>
-        </div>
-        <div class="user-icons">
-            <i class="fas fa-user"></i>
-            <i class="fas fa-shopping-cart"></i>
-        </div>
+    <div className="navbar">
+      <div className="social-icons">
+          <FontAwesomeIcon icon={faFacebookF} className="icon-spacing" />
+          <FontAwesomeIcon icon={faInstagram} className="icon-spacing" />
+      </div>
+      <div className="user-icons">
+          <FontAwesomeIcon icon={faUser} className="icon-spacing" />
+          <FontAwesomeIcon icon={faShoppingCart} className="icon-spacing" />
+      </div>
     </div>
 
     <div class="header">
@@ -32,21 +37,57 @@ function App() {
       </div>
       
     </div>
+
     <div class="separator">
       </div>
-    <div>
-    <div class="dropdown-menu">
-        <div class="menu-item">Menu item</div>
-        <div class="menu-item">Menu item</div>
-        <div class="menu-item">Menu item</div>
-        <div class="menu-item">Menu item</div>
-        <div class="menu-item">Menu item</div>
-        <div class="menu-item">Menu item</div>
-        <div class="menu-item">Menu item</div>
-        <div class="menu-item">Menu item</div>
-    </div>
 
-    </div>
+    <div class="container">
+      <div class="dropdown-menu">
+        <div class="menu-item">Menu item</div>
+        <div class="menu-item">Menu item</div>
+        <div class="menu-item">Menu item</div>
+        <div class="menu-item">Menu item</div>
+        <div class="menu-item">Menu item</div>
+        <div class="menu-item">Menu item</div>
+        <div class="menu-item">Menu item</div>
+        <div class="menu-item">Menu item</div>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-image">
+            <img src={productoPrueba} alt="Imagen del producto" />
+          </div>
+          <div class="card-content">
+            <h3>Título</h3>
+            <p class="category">Categoría</p>
+            <p class="description">Descripción</p>
+            <div class="rating">
+              <span class="star filled">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+            </div>
+            <button class="add-button">Agregar +</button>
+          </div>
+        </div>
+      </div>
+      </div>
+
+      <footer class="footer-footer">
+          <div class="footer-content-footer">
+              <div class="social-icons-footer">
+                  <FontAwesomeIcon icon={faFacebookF} className="icon-spacing-footer" />
+                  <FontAwesomeIcon icon={faInstagram} className="icon-spacing-footer" />
+              </div>
+              <div class="logo-footer">
+                  <img src={icon} alt="Logo" class="logo-image-footer" />
+              </div>
+          </div>
+      </footer>
+
+
 
 
     </>

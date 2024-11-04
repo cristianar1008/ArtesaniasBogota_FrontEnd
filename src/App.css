@@ -31,11 +31,16 @@
 .social-icons i {
   margin-right: 15px; /* Agrega espacio entre los íconos */
   cursor: pointer;
+  
 }
 
 .user-icons i {
   margin-left: 15px;
   cursor: pointer;
+}
+
+.icon-spacing {
+  margin-right: 25px; /* Ajusta el espacio según tus necesidades */
 }
 
 .navbar i:hover {
@@ -93,6 +98,14 @@
   margin-top: 10px;
   width: 100%;
 }
+/* Contenedor principal que organiza el menú y las tarjetas */
+.container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px; /* Espacio entre el menú y las tarjetas */
+  padding: 45px;
+}
 
 /* Estilos del contenedor del menú */
 .dropdown-menu {
@@ -101,7 +114,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra */
   padding: 10px 0; /* Espacio alrededor del menú */
   width: 150px; /* Ajusta el ancho según sea necesario */
-  margin: 20px; /* Espacio fuera del menú */
+  font-family: Arial, sans-serif; /* Establece la fuente a Arial */
 }
 
 /* Estilos para cada elemento del menú */
@@ -115,5 +128,133 @@
 /* Efecto de hover para los elementos */
 .menu-item:hover {
   background-color: #bcbcc4; /* Color de fondo cuando se pasa el cursor */
+}
+
+/* Contenedor de tarjetas para alinear varias tarjetas a la derecha */
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-right: 1000px;
+}
+
+/* Estilos para la tarjeta */
+.card {
+  width: 200px; /* Ajusta según sea necesario */
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #d3d3d8; /* Color gris claro */
+  font-family: Arial, sans-serif;
+}
+
+/* Imagen de la tarjeta */
+.card-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Contenido de la tarjeta */
+.card-content {
+  padding: 15px;
+  background-color: #f0f0f3; /* Fondo claro */
+}
+
+/* Estilos del título */
+.card-content h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+/* Estilos de categoría y descripción */
+.card-content .category, .card-content .description {
+  font-size: 14px;
+  color: #666;
+  margin: 5px 0;
+}
+
+/* Estilos para las estrellas de calificación */
+.rating {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.star {
+  font-size: 20px;
+  color: #ccc; /* Estrellas sin calificar */
+}
+
+.star.filled {
+  color: #f7a700; /* Estrellas calificadas */
+}
+
+/* Estilos del botón */
+.add-button {
+  background-color: #9C744B; /* Tono marrón */
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Efecto de hover en el botón */
+.add-button:hover {
+  opacity: 0.8;
+}
+
+
+.footer-footer {
+  background-color: #9C744B; /* Tono marrón */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+  position: block; /* Fija el footer */
+  bottom: 500px; /* Alinea el footer al fondo de la pantalla */
+  width: 100%;
+  height: 150px; /* Altura del footer */
+  z-index: 100; /* Asegura que el footer esté sobre otros elementos */
+  box-sizing: border-box;
+  margin: 0; /* Elimina márgenes */
+  padding: 0; /* Elimina padding */
+}
+
+.footer-content-footer {
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end; /* Alinea los elementos a la derecha */
+  align-items: center;
+}
+
+.social-icons-footer {
+  display: flex;
+  margin-right: 20px; /* Espacio entre los íconos y el logo */
+}
+
+.icon-spacing-footer {
+  margin-right: 15px; /* Espacio entre los iconos */
+  font-size: 24px; /* Ajusta el tamaño de los íconos */
+  color: white; /* Color de los íconos */
+}
+
+.social-icons-footer .icon-spacing-footer:last-child {
+  margin-right: 0; /* Elimina el espacio después del último icono */
+}
+
+.logo-footer {
+  display: flex;
+  align-items: center;
+}
+
+.logo-image-footer {
+  width: 60px; /* Ajusta el tamaño del logo */
+  height: auto;
+  border-radius: 50%; /* Si deseas que el logo sea redondo */
 }
 
