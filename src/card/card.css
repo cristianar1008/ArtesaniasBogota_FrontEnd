@@ -1,0 +1,77 @@
+/* Contenedor para las estrellas y el botón */
+.rating-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+/* Estilos para la tarjeta */
+.card {
+    width: 250px; /* Ajusta según sea necesario */
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #d3d3d8; /* Color gris claro */
+    font-family: Arial, sans-serif;
+}
+
+/* Imagen de la tarjeta */
+.card-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Contenido de la tarjeta */
+.card-content {
+    padding: 15px;
+    background-color: #f0f0f3; /* Fondo claro */
+}
+
+/* Estilos del título */
+.card-content h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+/* Estilos de categoría y descripción */
+.card-content .category,
+.card-content .description {
+    font-size: 14px;
+    color: #666;
+    margin: 5px 0;
+}
+
+/* Estilos para las estrellas de calificación */
+.rating {
+    display: flex;
+    align-items: center;
+    gap: 4px; /* Espaciado entre estrellas */
+}
+
+.star {
+    font-size: 20px;
+    color: #ccc; /* Estrellas sin calificar */
+}
+
+.star.filled {
+    color: #f7a700; /* Estrellas calificadas */
+}
+
+/* Estilos del botón */
+.add-button {
+    background-color: #9C744B; /* Tono marrón */
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Efecto de hover en el botón */
+.add-button:hover {
+    opacity: 0.8;
+}

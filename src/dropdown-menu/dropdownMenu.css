@@ -1,0 +1,23 @@
+/* Estilos del contenedor del menú */
+.dropdown-menu {
+    background-color: #d3d3d8; /* Color gris claro */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra */
+    padding: 10px 0; /* Espacio alrededor del menú */
+    width: 150px; /* Ajusta el ancho según sea necesario */
+    font-family: Arial, sans-serif; /* Establece la fuente a Arial */
+  }
+  
+  /* Estilos para cada elemento del menú */
+  .menu-item {
+    padding: 10px 20px; /* Espacio interno */
+    color: #333; /* Color del texto */
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  /* Efecto de hover para los elementos */
+  .menu-item:hover {
+    background-color: #bcbcc4; /* Color de fondo cuando se pasa el cursor */
+  }
+  
