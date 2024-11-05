@@ -1,0 +1,136 @@
+.user-in-container-user-In {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    font-family: Arial, sans-serif;
+}
+
+.icon-wrapper-user-In {
+    cursor: pointer;
+    position: relative;
+}
+
+.icon-spacing-user-In {
+    font-size: 24px;
+    color: #333;
+    margin: 0 15px;
+}
+
+.dropdown-menu-user-In {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px 0;
+    z-index: 10;
+}
+
+.menu-item-user-In {
+    padding: 10px 20px;
+    color: #333;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.menu-item-user-In:hover {
+    background-color: #f0f0f0;
+}
+
+/* Fondo oscuro */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+}
+
+
+
+/* Botón de cierre */
+.close-btn {
+    margin-top: 10px;
+    background: #aaa;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    background: #888;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px 30px;
+    border-radius: 5px;
+    width: 650px;
+    text-align: left;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.modal-content h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.modal-content input[type="email"],
+.modal-content input[type="password"] {
+    width: 96%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.modal-content button {
+    width: 100%;
+    padding: 10px;
+    background-color: #A67C52; /* Color marrón */
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.modal-content button:hover {
+    background-color: #8b5e3c; /* Color marrón oscuro al pasar el cursor */
+}
+
+.modal-content .forgot-password {
+    display: block;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #333;
+    text-align: center;
+}
+
+.modal-content .forgot-password a {
+    color: #333;
+    text-decoration: none;
+}
+
+.modal-content .forgot-password a:hover {
+    text-decoration: underline;
+}
+
+.icon-wrapper-user-In .icon-spacing-user-In {
+    color: white; /* Cambia el color del ícono a blanco */
+}

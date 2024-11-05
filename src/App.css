@@ -34,13 +34,15 @@
   
 }
 
+.icon-spacing{
+  font-size: 24px;
+  color: white;
+  margin: 0 15px;
+}
+
 .user-icons i {
   margin-left: 15px;
   cursor: pointer;
-}
-
-.icon-spacing {
-  margin-right: 25px; /* Ajusta el espacio según tus necesidades */
 }
 
 .navbar i:hover {

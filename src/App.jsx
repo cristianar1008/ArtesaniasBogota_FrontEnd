@@ -6,6 +6,7 @@ import icon from './assets/icono.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { faUser, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import UserIn from './userIn/userIn'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -18,8 +19,7 @@ function App() {
           <FontAwesomeIcon icon={faInstagram} className="icon-spacing" />
       </div>
       <div className="user-icons">
-          <FontAwesomeIcon icon={faUser} className="icon-spacing" />
-          <FontAwesomeIcon icon={faShoppingCart} className="icon-spacing" />
+          <UserIn></UserIn>
       </div>
     </div>
 
