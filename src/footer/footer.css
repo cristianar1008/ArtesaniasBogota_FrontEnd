@@ -6,6 +6,7 @@
     align-items: center;
   }
   
+  
   .social-icons-footer {
     display: flex;
     margin-right: 20px; /* Espacio entre los íconos y el logo */
@@ -27,7 +28,9 @@
   }
   
   .logo-image-footer {
-    width: 60px; /* Ajusta el tamaño del logo */
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 150px; /* Ajusta el tamaño del logo */
     height: auto;
     border-radius: 50%; /* Si deseas que el logo sea redondo */
   }

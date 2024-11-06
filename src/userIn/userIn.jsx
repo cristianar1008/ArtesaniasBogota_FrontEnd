@@ -84,6 +84,12 @@ function UserIn() {
       })
       .then((data) => {
         console.log(data);
+        Swal.fire({
+          icon: 'success',
+          title: 'Éxito',
+          timer: 3000,  // 3000 milisegundos = 3 segundos
+          showConfirmButton: false,  // Para no mostrar el botón de confirmación
+        });
         window.location.href = '/home';
         closeModal();
       })
