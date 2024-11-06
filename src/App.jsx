@@ -1,4 +1,5 @@
 import './App.css'
+import './index.css'
 import DropDownMenu from './dropdown-menu/dropdownMenu';
 import Card from './card/card';
 import Footer from './footer/footer'
@@ -10,7 +11,9 @@ function App() {
     <>
     <Head></Head>
     <div class="container">
-      <DropDownMenu></DropDownMenu>
+      <div>
+          <DropDownMenu></DropDownMenu>
+      </div>
       <div class="cards">
         <Card></Card>
       </div>

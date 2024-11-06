@@ -59,6 +59,7 @@
 
 /* Fondo oscuro para el modal */
 .modal-overlay {
+    overflow-y: scroll;
     position: fixed;
     top: 0;
     left: 0;
@@ -87,9 +88,11 @@
     margin-bottom: 15px;
     color: #333;
 }
-
+.modal-content input[type="date"],
+.modal-content input[type="text"],
 .modal-content input[type="email"],
-.modal-content input[type="password"] {
+.modal-content input[type="password"],
+.modal-content input[type="tel"]  {
     width: 96%;
     padding: 10px;
     margin-bottom: 15px;
@@ -208,3 +211,8 @@
 .continue-button:hover {
     background-color: #e0e0e0;
 }
+
+/* sweetalert.css */
+.custom-swal {
+    font-family: Arial, sans-serif !important;
+  }
