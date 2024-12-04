@@ -1,15 +1,21 @@
-/* Contenedor principal que organiza el menú y las tarjetas */
+/* Contenedor principal */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Asegura que el contenedor ocupe toda la pantalla */
+  margin: 0;
+}
+
+/* Contenido principal */
 .container {
+  flex: 1; /* Permite que el contenido ocupe el espacio disponible */
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 20px; /* Espacio entre el menú y las tarjetas */
+  gap: 20px;
   padding: 45px;
+  height: 100%;
 }
-
-
-
-
 /* Contenedor de tarjetas para alinear varias tarjetas a la derecha */
 .cards {
   display: flex;
@@ -19,18 +25,15 @@
 }
 
 
+/* Footer */
 .footer-footer {
   background-color: #9C744B; /* Tono marrón */
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 100px;
-  position: block; /* Fija el footer */
-  bottom: 500px; /* Alinea el footer al fondo de la pantalla */
   width: 100%;
   height: 200px; /* Altura del footer */
-  z-index: 100; /* Asegura que el footer esté sobre otros elementos */
-  box-sizing: border-box;
+  box-sizing: border-box; /* Incluye padding en el tamaño total */
   margin: 0; /* Elimina márgenes */
   padding: 0; /* Elimina padding */
 }

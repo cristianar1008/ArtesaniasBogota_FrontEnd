@@ -1,17 +1,33 @@
-import '../App.css'
-import '../index.css'
+import './home.css'
+import { useState } from 'react';
 import Footer from '../footer/footer'
 import Head from '../head/head';
+import HeadAdmin from '../Admin/Admin-head/head_admin';
+import AdminUserIndex from '../Admin/Admin-user-index/Admin-user-index';
 
 function Home() {
- 
+
+  // Estado para controlar si el componente debe ser visible
+  const [isVisibleWelcome, setIsVisibleWelcome] = useState(true);
+  const [isVisibleUserIndex, setIsVisibleUserIndex] = useState(false);
+
+  // Función para cambiar la visibilidad
+  const toggleVisibilityWelcome = () => {
+    setIsVisibleWelcome(!isVisibleWelcome);
+  };
+
+  const toggleVisibilityUserIndex = () => {
+    setIsVisibleUserIndex(!isVisibleUserIndex);
+  }; 
+  
   return (
     <>
-    <Head></Head>
+    <HeadAdmin toggleVisibilityWelcome={toggleVisibilityWelcome} ></HeadAdmin>
     
-    <div>
+    {isVisibleWelcome && <div className='container-body'>
         <center><h1>¡Bienvenido!</h1></center>
-    </div>
+    </div>}
+    {isVisibleUserIndex && <AdminUserIndex></AdminUserIndex>}
 
     <footer class="footer-footer">
       <Footer></Footer>

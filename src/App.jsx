@@ -18,10 +18,11 @@ function App() {
         <Card></Card>
       </div>
     </div>
-
+    
     <footer class="footer-footer">
       <Footer></Footer>
     </footer>
+
     </>
   )
 }

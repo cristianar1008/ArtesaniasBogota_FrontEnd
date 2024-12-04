@@ -5,34 +5,33 @@
     width: 100%;
     position: relative;
     font-family: Arial, sans-serif;
-    
-}
-
-.icon-wrapper-user-In:first-of-type {
-    margin-right: 20px; /* Ajusta el valor según el espacio que desees */
-}
-
-.icon-wrapper-user-In {
+  }
+  
+  .icon-wrapper-user-In {
     cursor: pointer;
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-.icon-spacing-user-In {
+    margin-right: 20px; /* Espacio entre los íconos */
+  }
+  
+  .icon-wrapper-user-In:last-of-type {
+    margin-right: 0; /* Evita el margen al final del último ícono */
+  }
+  
+  .icon-spacing-user-In {
     font-size: 24px;
     color: white;
-    margin-bottom: 5px;
-   
-}
-.icon-label {
+  }
+  
+  .icon-label {
     font-size: 12px;
     color: white;
     text-align: center;
-    margin-top: -5px;
-}
-
+    margin-top: 5px; /* Espacio entre el ícono y el texto */
+  }
+  
 /* Dropdown del usuario */
 .dropdown-menu-user-In {
     position: absolute;

@@ -1,6 +1,14 @@
-body{
-  margin: 0;
-  overflow-y: scroll;
-  font-family: 'Arial', sans-serif;
 
+
+/* Contenedor principal que organiza el menú y las tarjetas */
+.container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px; /* Espacio entre el menú y las tarjetas */
+  padding: 45px;
+}
+
+main {
+  flex: 1; /* Este toma todo el espacio disponible */
 }

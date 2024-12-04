@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { faUserTie } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
-import './userIn.css';
-import backendConfig from '../backEnd.json';
+import './userIn-Admin.css';
+import backendConfig from '../../backEnd.json';
 
-function UserIn() {
+function UserIn_Admin({toggleVisibilityWelcome}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -162,12 +163,17 @@ function UserIn() {
     setIsMenuOpen((prevState) => !prevState);
   };
 
+  const toggleUser = () => {
+    window.location.href = '/userAdmin';
+  };
+
   
 
   const closeModal = () => {
     setIsModalOpen(false);
   };
 
+ 
 
   const closeRegisterModal = () => {
     setIsRegisterModalOpen(false);
@@ -288,13 +294,20 @@ function UserIn() {
 
   return (
     <div className="user-in-container-user-In">
+
+     <div className="icon-wrapper-user-In" onClick={toggleVisibilityWelcome}>
+        <FontAwesomeIcon icon={faUserTie} className="icon-spacing-user-In" />
+        <span className="icon-label">Usuarios</span>
+      </div>
+
       <div className="icon-wrapper-user-In" onClick={toggleMenu}>
         <FontAwesomeIcon icon={faUser} className="icon-spacing-user-In" />
         <span className="icon-label">Mi cuenta</span>
         {isMenuOpen && (
           <div className="dropdown-menu-user-In">
-            <div className="menu-item-user-In" onClick={showLoginModal}>Iniciar sesión</div>
-            <div className="menu-item-user-In" onClick={showRegisterModal}>Registrarse</div>
+            <div className="menu-item-user-In" onClick={showLoginModal}>Mi perfil</div>
+            <div className="menu-item-user-In" onClick={showRegisterModal}>Actualizar contraseña</div>
+            <div className="menu-item-user-In" onClick={showRegisterModal}>Cerrar sesión</div>
           </div>
         )}
       </div>
@@ -303,7 +316,6 @@ function UserIn() {
         <FontAwesomeIcon icon={faShoppingCart} className="icon-spacing-user-In" />
         <span className="icon-label">Mi carrito</span>
       </div>
-
 
        {/* Barra lateral del carrito */}
        <div className={`sidebar-cart ${isCartOpen ? 'active' : ''}`}>
@@ -317,10 +329,4 @@ function UserIn() {
   );
 }
 
-export default UserIn;
-
-
-
-     
-
-
+export default UserIn_Admin;
