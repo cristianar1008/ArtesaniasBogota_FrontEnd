@@ -14,11 +14,8 @@ function Home() {
   // Función para cambiar la visibilidad
   const toggleVisibilityWelcome = () => {
     setIsVisibleWelcome(!isVisibleWelcome);
-  };
-
-  const toggleVisibilityUserIndex = () => {
     setIsVisibleUserIndex(!isVisibleUserIndex);
-  }; 
+  };
   
   return (
     <>
@@ -27,6 +24,7 @@ function Home() {
     {isVisibleWelcome && <div className='container-body'>
         <center><h1>¡Bienvenido!</h1></center>
     </div>}
+
     {isVisibleUserIndex && <AdminUserIndex></AdminUserIndex>}
 
     <footer class="footer-footer">
