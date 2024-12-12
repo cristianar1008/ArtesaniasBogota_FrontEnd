@@ -1,46 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { TextField, Box } from '@mui/material';
+import { TextField, Box, Switch } from '@mui/material';
+import axios from 'axios'; // Importar axios
 
 const AdminUserDataTable = () => {
-  // Datos de ejemplo
-  const [rows, setRows] = useState([
-    {
-      id: 1,
-      documento: '12345678',
-      fecha_nacimiento: '1990-01-01',
-      telefono: '3001234567',
-      primer_nombre: 'Juan',
-      segundo_nombre: 'Carlos',
-      primer_apellido: 'Pérez',
-      segundo_apellido: 'López',
-      fecha_creacion: '2023-12-01',
-      direccion: 'Calle 123',
-      email: 'juan.perez@gmail.com',
-    },
-    {
-      id: 2,
-      documento: '87654321',
-      fecha_nacimiento: '1985-05-10',
-      telefono: '3007654321',
-      primer_nombre: 'Ana',
-      segundo_nombre: '',
-      primer_apellido: 'Gómez',
-      segundo_apellido: 'Martínez',
-      fecha_creacion: '2023-12-02',
-      direccion: 'Carrera 456',
-      email: 'ana.gomez@gmail.com',
-    },
-  ]);
-
-  // Estado para el filtro
+  const [rows, setRows] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [filterText, setFilterText] = useState('');
-
-  // Estado para la visibilidad de columnas
   const [columnVisibilityModel, setColumnVisibilityModel] = useState({
     fecha_nacimiento: false, // Columna oculta inicialmente
-    fecha_creacion: false,     // Columna oculta inicialmente
+    fecha_creacion: false,   // Columna oculta inicialmente
   });
+
+  // Obtener datos de usuarios desde el backend
+  useEffect(() => {
+    axios.get('http://localhost:8081/api/usuarios/list') 
+      .then((response) => {
+        console.log(response.data)
+        setRows(response.data);  
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error al obtener los datos de usuarios', error);
+        setLoading(false);
+      });
+  }, []);
 
   // Filtrar los datos basados en el texto ingresado
   const filteredRows = rows.filter((row) =>
@@ -48,6 +32,23 @@ const AdminUserDataTable = () => {
       value.toString().toLowerCase().includes(filterText.toLowerCase())
     )
   );
+
+  // Función para manejar el cambio del estado "active"
+  const handleActiveToggle = (id) => {
+    // Realizar solicitud PUT para cambiar el estado del usuario
+    axios.put(`/api/usuarios/list/${id}`)
+      .then((response) => {
+        // Actualizar el estado de los usuarios en la UI
+        setRows((prevRows) =>
+          prevRows.map((row) =>
+            row.id === id ? { ...row, active: !row.active } : row
+          )
+        );
+      })
+      .catch((error) => {
+        console.error('Error al cambiar el estado del usuario', error);
+      });
+  };
 
   // Columnas para el DataTable
   const columns = [
@@ -61,6 +62,18 @@ const AdminUserDataTable = () => {
     { field: 'fecha_creacion', headerName: 'Fecha Creación', flex: 2 },
     { field: 'direccion', headerName: 'Dirección', flex: 2 },
     { field: 'email', headerName: 'Email', flex: 2 },
+    {
+      field: 'active',
+      headerName: 'Activo',
+      flex: 1,
+      renderCell: (params) => (
+        <Switch
+          checked={params.row.active}
+          onChange={() => handleActiveToggle(params.row.id)}
+          color="primary"
+        />
+      ),
+    },
   ];
 
   return (
@@ -105,7 +118,8 @@ const AdminUserDataTable = () => {
             pageSize={5}
             rowsPerPageOptions={[5, 10, 20]}
             disableSelectionOnClick
-            columnVisibilityModel={columnVisibilityModel} // Enlaza el modelo de visibilidad
+            loading={loading}  // Muestra el loading mientras se cargan los datos
+            columnVisibilityModel={columnVisibilityModel}
             onColumnVisibilityModelChange={(newModel) =>
               setColumnVisibilityModel(newModel)
             }
