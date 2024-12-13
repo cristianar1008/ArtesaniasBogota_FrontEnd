@@ -14,13 +14,16 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #d3d3d8; /* Color gris claro */
     font-family: Arial, sans-serif;
+    margin: 10px; /* Espaciado entre tarjetas */
 }
 
 /* Imagen de la tarjeta */
 .card-image img {
-    width: 100%;
-    height: auto;
-    display: block;
+    width: 100%; /* Ajusta al ancho de su contenedor */
+    height: 200px; /* Altura fija para todas las imágenes */
+    object-fit: cover; /* Asegura que la imagen se recorte para llenar el espacio */
+    display: block; /* Evita el espacio adicional debajo de las imágenes */
+ 
 }
 
 /* Contenido de la tarjeta */
@@ -44,6 +47,14 @@
     margin: 5px 0;
 }
 
+/* Estilos para el precio */
+.price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #000000; /* Verde llamativo */
+    margin: 8px 0;
+}
+
 /* Estilos para las estrellas de calificación */
 .rating {
     display: flex;
@@ -54,10 +65,16 @@
 .star {
     font-size: 20px;
     color: #ccc; /* Estrellas sin calificar */
+    transition: color 0.3s ease;
 }
 
 .star.filled {
     color: #f7a700; /* Estrellas calificadas */
+}
+
+/* Efecto de hover para las estrellas (opcional) */
+.star:hover {
+    color: #ffc107;
 }
 
 /* Estilos del botón */
@@ -75,3 +92,4 @@
 .add-button:hover {
     opacity: 0.8;
 }
+

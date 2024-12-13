@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 import './userIn.css';
 import backendConfig from '../backEnd.json';
 
-function UserIn() {
+function UserIn({carrito}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -52,7 +52,7 @@ function UserIn() {
         setPassword(password);
         
         // Llamamos a la función de login
-        handleLogin();
+        handleLogin(email, password);
       }
     });
   };
@@ -69,105 +69,195 @@ function UserIn() {
   const [fechaNacimiento, setFechaNacimiento] = useState('');
   const [fechaCreacion] = useState(new Date().toISOString().split('T')[0]);
 
-  const showRegisterModal = () => {
+  const showRegisterModal = async () => {
     Swal.fire({
-      title: 'Formulario de Registro',
-      html: `
-        <input type="text" id="documento" class="swal2-input" placeholder="Número de documento de identidad" required />
-        <input type="text" id="primerNombre" class="swal2-input" placeholder="Primer nombre" required />
-        <input type="text" id="segundoNombre" class="swal2-input" placeholder="Segundo nombre" />
-        <input type="text" id="primerApellido" class="swal2-input" placeholder="Primer apellido" required />
-        <input type="text" id="segundoApellido" class="swal2-input" placeholder="Segundo apellido" required />
-        <input type="tel" id="telefono" class="swal2-input" placeholder="Número de teléfono" required />
-        <input type="text" id="direccion" class="swal2-input" placeholder="Dirección de residencia" required />
-        <input type="email" id="email" class="swal2-input" placeholder="Correo electrónico" required />
-        <label style="font-size: 15px; color: black;">Fecha de nacimiento</label><br />
-        <input type="date" id="fechaNacimiento" class="swal2-input" required />
-        <input type="password" id="password" class="swal2-input" placeholder="Contraseña" required />
-      `,
-      showCloseButton: true,
-      showCancelButton: false,
-      confirmButtonText: 'Registrarse',
-      customClass: {
-        confirmButton: 'btn-confirm',
-        title: 'swal-title'
-      },
-      preConfirm: () => {
-        const documento = Swal.getPopup().querySelector('#documento').value;
-        const primerNombre = Swal.getPopup().querySelector('#primerNombre').value;
-        const segundoNombre = Swal.getPopup().querySelector('#segundoNombre').value;
-        const primerApellido = Swal.getPopup().querySelector('#primerApellido').value;
-        const segundoApellido = Swal.getPopup().querySelector('#segundoApellido').value;
-        const telefono = Swal.getPopup().querySelector('#telefono').value;
-        const direccion = Swal.getPopup().querySelector('#direccion').value;
-        const email = Swal.getPopup().querySelector('#email').value;
-        const fechaNacimiento = Swal.getPopup().querySelector('#fechaNacimiento').value;
-        const password = Swal.getPopup().querySelector('#password').value;
-  
-        // Validación de los campos requeridos
-        if (!documento || !primerNombre || !primerApellido || !telefono || !direccion || !email || !fechaNacimiento || !password) {
-          Swal.showValidationMessage('Por favor, completa todos los campos requeridos');
-          return false;
+        title: 'Formulario de Registro',
+        html: `
+            <input type="text" id="documento" class="swal2-input" placeholder="Número de documento de identidad" required />
+            <input type="text" id="primerNombre" class="swal2-input" placeholder="Primer nombre" required />
+            <input type="text" id="segundoNombre" class="swal2-input" placeholder="Segundo nombre" />
+            <input type="text" id="primerApellido" class="swal2-input" placeholder="Primer apellido" required />
+            <input type="text" id="segundoApellido" class="swal2-input" placeholder="Segundo apellido" required />
+            <input type="tel" id="telefono" class="swal2-input" placeholder="Número de teléfono" required />
+            <input type="text" id="direccion" class="swal2-input" placeholder="Dirección de residencia" required />
+            <input type="email" id="email" class="swal2-input" placeholder="Correo electrónico" required />
+            <label style="font-size: 15px; color: black;">Fecha de nacimiento</label><br />
+            <input type="date" id="fechaNacimiento" class="swal2-input" required />
+            <input type="password" id="password" class="swal2-input" placeholder="Contraseña" required />
+            <input type="password" id="confirmPassword" class="swal2-input" placeholder="Confirmar Contraseña" required />
+        `,
+        showCloseButton: true,
+        showCancelButton: false,
+        confirmButtonText: 'Registrarse',
+        customClass: {
+            confirmButton: 'btn-confirm',
+            title: 'swal-title'
+        },
+        preConfirm: () => {
+            const documento = Swal.getPopup().querySelector('#documento').value;
+            const primerNombre = Swal.getPopup().querySelector('#primerNombre').value;
+            const segundoNombre = Swal.getPopup().querySelector('#segundoNombre').value;
+            const primerApellido = Swal.getPopup().querySelector('#primerApellido').value;
+            const segundoApellido = Swal.getPopup().querySelector('#segundoApellido').value;
+            const telefono = Swal.getPopup().querySelector('#telefono').value;
+            const direccion = Swal.getPopup().querySelector('#direccion').value;
+            const email = Swal.getPopup().querySelector('#email').value;
+            const fechaNacimiento = Swal.getPopup().querySelector('#fechaNacimiento').value;
+            const password = Swal.getPopup().querySelector('#password').value;
+            const confirmPassword = Swal.getPopup().querySelector('#confirmPassword').value;
+
+            // Validación de los campos requeridos
+            if (!documento || !primerNombre || !primerApellido || !telefono || !direccion || !email || !fechaNacimiento || !password || !confirmPassword) {
+                Swal.showValidationMessage('Por favor, completa todos los campos requeridos');
+                return false;
+            }
+
+            // Validación de contraseña
+            if (!validatePassword(password)) {
+                Swal.showValidationMessage('La contraseña debe tener al menos 8 caracteres, incluir al menos una letra mayúscula, un número y un carácter especial.');
+                return false;
+            }
+
+            // Verificar si las contraseñas coinciden
+            if (password !== confirmPassword) {
+                Swal.showValidationMessage('Las contraseñas no coinciden.');
+                return false;
+            }
+
+            // Retornamos los valores del formulario
+            return {
+                documento,
+                primerNombre,
+                segundoNombre,
+                primerApellido,
+                segundoApellido,
+                telefono,
+                direccion,
+                email,
+                fechaNacimiento,
+                password
+            };
+        },
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            const {
+                documento,
+                primerNombre,
+                segundoNombre,
+                primerApellido,
+                segundoApellido,
+                telefono,
+                direccion,
+                email,
+                fechaNacimiento,
+                password
+            } = result.value;
+
+            setDocumento(documento);
+            setPrimerNombre(primerNombre);
+            setSegundoNombre(segundoNombre);
+            setPrimerApellido(primerApellido);
+            setSegundoApellido(segundoApellido);
+            setTelefono(telefono);
+            setDireccion(direccion);
+            setEmail(email);
+            setFechaNacimiento(fechaNacimiento);
+            setPassword(password);
+            let code = await sendEmail(email)
+        
+            showValidateModal(code, documento,
+                fechaNacimiento,
+                telefono,
+                primerNombre,
+                segundoNombre,
+                primerApellido,
+                segundoApellido,
+                direccion,
+                password,
+                email)
+            // handleRegister(documento,
+            //   fechaNacimiento,
+            //   telefono,
+            //   primerNombre,
+            //   segundoNombre,
+            //   primerApellido,
+            //   segundoApellido,
+            //   direccion,
+            //   password,
+            //   email
+            //   );
         }
-  
-        // Retornamos los valores del formulario
-        return {
-          documento,
-          primerNombre,
-          segundoNombre,
-          primerApellido,
-          segundoApellido,
-          telefono,
-          direccion,
-          email,
-          fechaNacimiento,
-          password,
-        };
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // Obtener los valores del formulario
-        const {
-          documento,
-          primerNombre,
-          segundoNombre,
-          primerApellido,
-          segundoApellido,
-          telefono,
-          direccion,
-          email,
-          fechaNacimiento,
-          password,
-        } = result.value;
-  
-        // Establecer los valores en los useState
-        setDocumento(documento);
-        setPrimerNombre(primerNombre);
-        setSegundoNombre(segundoNombre);
-        setPrimerApellido(primerApellido);
-        setSegundoApellido(segundoApellido);
-        setTelefono(telefono);
-        setDireccion(direccion);
-        setEmail(email);
-        setFechaNacimiento(fechaNacimiento);
-        setPassword(password);
-  
-        // Ahora podemos usar estos valores para manejar el registro
-        handleRegister();
-      }
     });
-  };
+};
+
+const showValidateModal = (code,  
+  documento,
+  fechaNacimiento,
+  telefono,
+  primerNombre,
+  segundoNombre,
+  primerApellido,
+  segundoApellido,
+  direccion,
+  password,
+  email) => {
+
+  Swal.fire({
+    title: 'Validación de correo',
+    html: `
+      <input type="number" id="code" class="swal2-input" placeholder="Ingrese el código enviado a su email" />
+    `,
+    showCloseButton: true,
+    showCancelButton: false,
+    confirmButtonText: 'Enviar',
+    customClass: {
+      title: 'swal-title',
+      confirmButton: 'btn-confirm',
+    },
+    preConfirm: () => {
+      const codeU = Swal.getPopup().querySelector('#code').value;
+    
+
+      if (!codeU) {
+        Swal.showValidationMessage('Por favor ingrese el código');
+        return false; // No cerrar el modal
+      }
+      if(Number(codeU) != Number(code)){
+        Swal.showValidationMessage('Código incorrecto');
+        return false; // No cerrar el modal
+
+      }
+
+      return codeU 
+    },
+  }).then((result) => {
+    if (result.isConfirmed) {
+      handleRegister( documento,
+        fechaNacimiento,
+        telefono,
+        primerNombre,
+        segundoNombre,
+        primerApellido,
+        segundoApellido,
+        direccion,
+        password,
+        email);
+    }
+  });
+};
+
+
+
+// Función para validar la contraseña
+const validatePassword = (password) => {
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
+    return passwordRegex.test(password);
+};
+
   
   const toggleMenu = () => {
     setIsMenuOpen((prevState) => !prevState);
   };
-
-  
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
 
   const closeRegisterModal = () => {
     setIsRegisterModalOpen(false);
@@ -184,16 +274,15 @@ function UserIn() {
     setIsCartOpen(false);
   };
 
-  const handleLogin = () => {
+  const handleLogin = (e, p) => {
     const options = {
       method: 'POST',
-      headers: {
+    headers: {
         'Content-Type': 'application/json',
-        cookie: 'JSESSIONID=7B9D7FB426EADAD108536448C18CBF71',
-      },
-      body: JSON.stringify({ email, password }),
+    },
+      body: JSON.stringify({"email": e, "password": p }),
     };
-
+    
     fetch(`${backendConfig.host}auth/login`, options)
       .then((response) => {
         if (!response.ok) {
@@ -207,22 +296,11 @@ function UserIn() {
            
             }
           });
-          throw new Error('Login failed');
+        } else {
+              window.location.href = '/home';
         }
         return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        Swal.fire({
-          icon: 'success',
-          title: 'Éxito',
-          timer: 3000,  // 3000 milisegundos = 3 segundos
-          showConfirmButton: false,  // Para no mostrar el botón de confirmación
-        });
-        window.location.href = '/home';
-        closeModal();
-      })
-      .catch((err) => {
+      }).catch((err) => {
         console.log(err);
         Swal.fire({
           icon: 'error',
@@ -232,31 +310,61 @@ function UserIn() {
       });
   };
 
-  const handleRegister = () => {
+  const sendEmail = async (e) => {
+    try {
+        const response = await fetch("http://localhost:8081/api/email_auth", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                toEmail: e
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (data.message === 'Ok') {
+            return data.confirmCode; // Retorna solo el código
+        } else {
+            throw new Error("Failed to send email");
+        }
+    } catch (error) {
+        console.error("Error:", error.message);
+        return null; // Retorna null en caso de error
+    }
+};
+
+
+
+  const handleRegister = (d, fN, t, p, s, pA, sA, dir, pss, em) => {
     const options = {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        cookie: 'JSESSIONID=7B9D7FB426EADAD108536448C18CBF71',
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        documento,
-        fechaNacimiento,
-        telefono: Number(telefono),
-        primerNombre,
-        segundoNombre,
-        primerApellido,
-        segundoApellido,
-        fechaCreacion,
-        direccion,
-        contrasenia: password,
-        email,
-      }),
+        documento: d,
+        fechaNacimiento: fN,
+        telefono: Number(t),
+        primerNombre: p,
+        segundoNombre: s,
+        primerApellido: pA,
+        segundoApellido: sA,
+        fechaCreacion: fechaCreacion,
+        direccion: dir,
+        contrasenia: pss,
+        email: em}),
     };
+    console.log(options)
   
-    fetch(`${backendConfig.host}auth/register`, options)
+    fetch('http://localhost:8081/api/usuarios/create/cliente', options)
       .then((response) => {
-        if (!response.ok) {
+        console.log(response)
+        if (response.ok == false) {
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
@@ -264,19 +372,17 @@ function UserIn() {
           });
           throw new Error('Registration failed');
         }
+        if (response.ok == true) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Registro exitoso',
+            text: 'El usuario ha sido registrado exitosamente',
+          });
+        }
         return response.json();
       })
-      .then((data) => {
-        console.log(data);
-        Swal.fire({
-          icon: 'success',
-          title: 'Registro exitoso',
-          text: 'El usuario ha sido registrado exitosamente',
-        });
-        closeRegisterModal();
-      })
       .catch((err) => {
-        console.error(err);
+        // console.error(err);
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
@@ -308,6 +414,14 @@ function UserIn() {
        {/* Barra lateral del carrito */}
        <div className={`sidebar-cart ${isCartOpen ? 'active' : ''}`}>
         <h3>Mis productos</h3>
+        <div class="cart-item">
+          <img src="https://vpinteriorismo.com/8107-large_default/pieza-decorativa-etnica-metal-marmol-n1.jpg" alt="Producto X" class="cart-item-image" />
+          <div class="cart-item-details">
+            <h4 class="cart-item-name">Producto X</h4>
+            <p class="cart-item-price">$120,000</p>
+          </div>
+        </div>
+
         <div className="cart-buttons">
           <button className="pay-button">Ir a pagar</button>
           <button className="continue-button" onClick={closeCart}>Seguir comprando</button>

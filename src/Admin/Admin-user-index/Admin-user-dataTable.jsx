@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { TextField, Box, Switch } from '@mui/material';
-import axios from 'axios'; // Importar axios
+import { TextField, Box } from '@mui/material';
+import axios from 'axios';
 
 const AdminUserDataTable = () => {
   const [rows, setRows] = useState([]);
@@ -14,10 +14,9 @@ const AdminUserDataTable = () => {
 
   // Obtener datos de usuarios desde el backend
   useEffect(() => {
-    axios.get('http://localhost:8081/api/usuarios/list') 
+    axios.get('http://localhost:8081/api/usuarios/list')
       .then((response) => {
-        console.log(response.data)
-        setRows(response.data);  
+        setRows(response.data);
         setLoading(false);
       })
       .catch((error) => {
@@ -33,23 +32,6 @@ const AdminUserDataTable = () => {
     )
   );
 
-  // Función para manejar el cambio del estado "active"
-  const handleActiveToggle = (id) => {
-    // Realizar solicitud PUT para cambiar el estado del usuario
-    axios.put(`/api/usuarios/list/${id}`)
-      .then((response) => {
-        // Actualizar el estado de los usuarios en la UI
-        setRows((prevRows) =>
-          prevRows.map((row) =>
-            row.id === id ? { ...row, active: !row.active } : row
-          )
-        );
-      })
-      .catch((error) => {
-        console.error('Error al cambiar el estado del usuario', error);
-      });
-  };
-
   // Columnas para el DataTable
   const columns = [
     { field: 'documento', headerName: 'Documento', flex: 2 },
@@ -62,18 +44,6 @@ const AdminUserDataTable = () => {
     { field: 'fecha_creacion', headerName: 'Fecha Creación', flex: 2 },
     { field: 'direccion', headerName: 'Dirección', flex: 2 },
     { field: 'email', headerName: 'Email', flex: 2 },
-    {
-      field: 'active',
-      headerName: 'Activo',
-      flex: 1,
-      renderCell: (params) => (
-        <Switch
-          checked={params.row.active}
-          onChange={() => handleActiveToggle(params.row.id)}
-          color="primary"
-        />
-      ),
-    },
   ];
 
   return (
@@ -118,11 +88,12 @@ const AdminUserDataTable = () => {
             pageSize={5}
             rowsPerPageOptions={[5, 10, 20]}
             disableSelectionOnClick
-            loading={loading}  // Muestra el loading mientras se cargan los datos
+            loading={loading} // Muestra el loading mientras se cargan los datos
             columnVisibilityModel={columnVisibilityModel}
             onColumnVisibilityModelChange={(newModel) =>
               setColumnVisibilityModel(newModel)
             }
+            getRowId={(row) => row.documento} // Usar 'documento' como id único
           />
         </Box>
       </Box>

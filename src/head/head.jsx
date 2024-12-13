@@ -5,7 +5,7 @@ import { faFacebookF, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import UserIn from '../userIn/userIn';
 
 
-function Head() {
+function Head({ carrito }) {
  
   return (
     <> 
@@ -15,7 +15,7 @@ function Head() {
           <FontAwesomeIcon icon={faInstagram} className="icon-spacing" />
       </div>
       <div className="user-icons">
-          <UserIn></UserIn>
+          <UserIn carrito = {carrito}></UserIn>
       </div>
     </div>
 
