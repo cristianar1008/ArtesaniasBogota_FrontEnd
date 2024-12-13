@@ -1,191 +1,142 @@
 import { useState } from 'react';
-import './Admin-user-index.css'
-import AdminUserDataTable from './Admin-user-dataTable'
+import './Admin-user-index.css';
+import AdminUserDataTable from './Admin-user-dataTable';
 import Swal from 'sweetalert2';
 
-
 function AdminUserIndex() {
+  const [selectedUser, setSelectedUser] = useState(null); // Usuario seleccionado
 
-  // Campos de registro
-const [documento, setDocumento] = useState('');
-const [primerNombre, setPrimerNombre] = useState('');
-const [segundoNombre, setSegundoNombre] = useState('');
-const [primerApellido, setPrimerApellido] = useState('');
-const [segundoApellido, setSegundoApellido] = useState('');
-const [telefono, setTelefono] = useState('');
-const [direccion, setDireccion] = useState('');
-const [fechaNacimiento, setFechaNacimiento] = useState('');
-const [fechaCreacion] = useState(new Date().toISOString().split('T')[0]);
-const [rol, setRol] = useState('Cliente');
-
-const showRegisterModal = () => {
-  Swal.fire({
-    title: 'Formulario de Registro',
-    html: `
-      <input type="text" id="documento" class="swal2-input" placeholder="Número de documento de identidad" required />
-      <input type="text" id="primerNombre" class="swal2-input" placeholder="Primer nombre" required />
-      <input type="text" id="segundoNombre" class="swal2-input" placeholder="Segundo nombre" />
-      <input type="text" id="primerApellido" class="swal2-input" placeholder="Primer apellido" required />
-      <input type="text" id="segundoApellido" class="swal2-input" placeholder="Segundo apellido" required />
-      <input type="tel" id="telefono" class="swal2-input" placeholder="Número de teléfono" required />
-      <input type="text" id="direccion" class="swal2-input" placeholder="Dirección de residencia" required />
-      <input type="email" id="email" class="swal2-input" placeholder="Correo electrónico" required />
-      <label style="font-size: 15px; color: black;">Fecha de nacimiento</label><br />
-      <input type="date" id="fechaNacimiento" class="swal2-input" required />
-      <input type="password" id="password" class="swal2-input" placeholder="Contraseña" required />
-      <select id="rol" class="swal2-input">
-        <option value="Administrador">Administrador</option>
-        <option value="Empleado">Empleado</option>
-        <option value="Cliente" selected>Cliente</option>
-      </select>
-    `,
-    showCloseButton: true,
-    showCancelButton: false,
-    confirmButtonText: 'Registrarse',
-    customClass: {
-      confirmButton: 'btn-confirm',
-      title: 'swal-title'
-    },
-    preConfirm: () => {
-      const documento = Swal.getPopup().querySelector('#documento').value;
-      const primerNombre = Swal.getPopup().querySelector('#primerNombre').value;
-      const segundoNombre = Swal.getPopup().querySelector('#segundoNombre').value;
-      const primerApellido = Swal.getPopup().querySelector('#primerApellido').value;
-      const segundoApellido = Swal.getPopup().querySelector('#segundoApellido').value;
-      const telefono = Swal.getPopup().querySelector('#telefono').value;
-      const direccion = Swal.getPopup().querySelector('#direccion').value;
-      const email = Swal.getPopup().querySelector('#email').value;
-      const fechaNacimiento = Swal.getPopup().querySelector('#fechaNacimiento').value;
-      const password = Swal.getPopup().querySelector('#password').value;
-      const rol = Swal.getPopup().querySelector('#rol').value;
-
-      // Validación de los campos requeridos
-      if (!documento || !primerNombre || !primerApellido || !telefono || !direccion || !email || !fechaNacimiento || !password) {
-        Swal.showValidationMessage('Por favor, completa todos los campos requeridos');
-        return false;
-      }
-
-      // Retornamos los valores del formulario
-      return {
-        documento,
-        primerNombre,
-        segundoNombre,
-        primerApellido,
-        segundoApellido,
-        telefono,
-        direccion,
-        email,
-        fechaNacimiento,
-        password,
-        rol,
-      };
-    },
-  }).then((result) => {
-    if (result.isConfirmed) {
-      // Obtener los valores del formulario
-      const {
-        documento,
-        primerNombre,
-        segundoNombre,
-        primerApellido,
-        segundoApellido,
-        telefono,
-        direccion,
-        email,
-        fechaNacimiento,
-        password,
-        rol,
-      } = result.value;
-
-      // Establecer los valores en los useState
-      setDocumento(documento);
-      setPrimerNombre(primerNombre);
-      setSegundoNombre(segundoNombre);
-      setPrimerApellido(primerApellido);
-      setSegundoApellido(segundoApellido);
-      setTelefono(telefono);
-      setDireccion(direccion);
-      setFechaNacimiento(fechaNacimiento);
-      setRol(rol);
-
-      // Ahora podemos usar estos valores para manejar el registro
-      handleRegister();
-    }
-  });
-};
-
-const handleRegister = () => {
-  const options = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      cookie: 'JSESSIONID=7B9D7FB426EADAD108536448C18CBF71',
-    },
-    body: JSON.stringify({
-      documento,
-      fechaNacimiento,
-      telefono: Number(telefono),
-      primerNombre,
-      segundoNombre,
-      primerApellido,
-      segundoApellido,
-      fechaCreacion,
-      direccion,
-      contrasenia: password,
-      email,
-      rol,
-    }),
+  // Función para formatear fecha al formato `yyyy-MM-dd` para campos de tipo `date`
+  const formatDateToYYYYMMDD = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Mes en formato 2 dígitos
+    const year = date.getFullYear();
+    return `${year}-${month}-${day}`;
   };
 
-  fetch(`${backendConfig.host}auth/register`, options)
-    .then((response) => {
-      if (!response.ok) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Error en el registro. Verifique sus datos.',
-        });
-        throw new Error('Registration failed');
+  // Mostrar modal de usuario (registro o edición)
+  const showUserModal = (user = null) => {
+    Swal.fire({
+      title: user ? 'Modificar usuario' : 'Registrar usuario',
+      html: `
+        <input type="text" id="documento" class="swal2-input" placeholder="Número de documento" value="${user?.documento || ''}" required />
+        <input type="date" id="fechaNacimiento" class="swal2-input" value="${user ? formatDateToYYYYMMDD(user.fechaNacimiento) : ''}" required />
+        <input type="tel" id="telefono" class="swal2-input" placeholder="Teléfono" value="${user?.telefono || ''}" required />
+        <input type="text" id="primerNombre" class="swal2-input" placeholder="Primer nombre" value="${user?.primerNombre || ''}" required />
+        <input type="text" id="segundoNombre" class="swal2-input" placeholder="Segundo nombre" value="${user?.segundoNombre || ''}" />
+        <input type="text" id="primerApellido" class="swal2-input" placeholder="Primer apellido" value="${user?.primerApellido || ''}" required />
+        <input type="text" id="segundoApellido" class="swal2-input" placeholder="Segundo apellido" value="${user?.segundoApellido || ''}" required />
+        <input type="text" id="direccion" class="swal2-input" placeholder="Dirección" value="${user?.direccion || ''}" required />
+        <input type="email" id="email" class="swal2-input" placeholder="Correo electrónico" value="${user?.email || ''}" required />
+      `,
+      showCloseButton: true,
+      showCancelButton: true,
+      confirmButtonText: user ? 'Modificar' : 'Registrar',
+      preConfirm: () => {
+        const documento = Swal.getPopup().querySelector('#documento').value;
+        const primerNombre = Swal.getPopup().querySelector('#primerNombre').value;
+        const segundoNombre = Swal.getPopup().querySelector('#segundoNombre').value;
+        const primerApellido = Swal.getPopup().querySelector('#primerApellido').value;
+        const segundoApellido = Swal.getPopup().querySelector('#segundoApellido').value;
+        const telefono = Swal.getPopup().querySelector('#telefono').value;
+        const direccion = Swal.getPopup().querySelector('#direccion').value;
+        const fecha_nacimiento = Swal.getPopup().querySelector('#fechaNacimiento').value;
+        const email = Swal.getPopup().querySelector('#email').value;
+
+        if (!documento || !primerNombre || !primerApellido || !telefono || !direccion || !fecha_nacimiento || !email) {
+          Swal.showValidationMessage('Por favor, completa todos los campos requeridos');
+          return false;
+        }
+
+        return {
+          documento,
+          primer_nombre: primerNombre,
+          segundo_nombre: segundoNombre,
+          primer_apellido: primerApellido,
+          segundo_apellido: segundoApellido,
+          telefono,
+          direccion,
+          fecha_nacimiento,
+          email,
+        };
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const userData = result.value;
+        if (user) {
+          handleUpdate(userData);
+        } else {
+          handleRegister(userData);
+        }
       }
-      return response.json();
-    })
-    .then((data) => {
-      console.log(data);
-      Swal.fire({
-        icon: 'success',
-        title: 'Registro exitoso',
-        text: 'El usuario ha sido registrado exitosamente',
-      });
-      closeRegisterModal();
-    })
-    .catch((err) => {
-      console.error(err);
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Error Interno',
-      });
     });
-};
+  };
 
+  // Registrar usuario
+  const handleRegister = (userData) => {
+    fetch('/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Error en el registro');
+        }
+        return response.json();
+      })
+      .then(() => {
+        Swal.fire('Éxito', 'Usuario registrado correctamente', 'success');
+      })
+      .catch(() => {
+        Swal.fire('Error', 'No se pudo registrar el usuario', 'error');
+      });
+  };
 
- 
+  // Modificar usuario
+  const handleUpdate = (userData) => {
+    fetch(`/api/usuarios/update?id=${userData.documento}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Error en la actualización');
+        }
+        return response.json();
+      })
+      .then(() => {
+        Swal.fire('Éxito', 'Usuario modificado correctamente', 'success');
+      })
+      .catch(() => {
+        Swal.fire('Error', 'No se pudo modificar el usuario', 'error');
+      });
+  };
+  
+
   return (
-    <>
-
-    
     <div className='container-body'>
       <center><h1>Gestión usuarios</h1></center>
       <div>
-              <button className = 'buttonRegister' onClick={showRegisterModal}>Registrar usuario</button>
-
-            <AdminUserDataTable></AdminUserDataTable>
+        <button className='buttonRegister' onClick={() => showUserModal()}>Registrar usuario</button>
+        <button
+          className='buttonEdit'
+          style={{ display: 'inline-block', marginLeft: '10px' }}
+          onClick={() => selectedUser ? showUserModal(selectedUser) : Swal.fire('Error', 'No hay usuario seleccionado', 'error')}
+        >
+          Modificar usuario
+        </button>
+        <AdminUserDataTable onUserSelect={setSelectedUser} />
       </div>
     </div>
-    
-
-    </>
-  )
+  );
 }
 
-export default AdminUserIndex
+export default AdminUserIndex;
