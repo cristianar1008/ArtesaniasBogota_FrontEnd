@@ -1,0 +1,167 @@
+/* Contenedor principal */
+.checkout-container {
+    display: flex;
+    flex-direction: column; /* Organiza los elementos verticalmente */
+    gap: 20px;
+    min-height: 100vh; /* Ocupa toda la altura de la ventana */
+    max-width: 1200px; /* Limita el ancho máximo del contenido */
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box; /* Incluye el padding dentro del tamaño total */
+    padding-right: 320px; /* Espacio para la barra lateral */
+}
+
+/* Panel principal */
+.main-panel {
+    flex: 2;
+}
+
+.stepper {
+    display: flex;
+    justify-content: space-between; /* Distribuye los pasos uniformemente */
+    margin-bottom: 20px;
+}
+
+.step {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-bottom: 2px solid #ddd;
+    color: #888;
+    font-weight: bold;
+}
+
+.step.active {
+    color: #000;
+    border-bottom: 2px solid #000;
+}
+
+/* Sección de información personal */
+.user-info-section h2 {
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.user-detail-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1rem;
+    color: #555;
+}
+
+.detail-label {
+    font-weight: bold;
+    color: #333;
+}
+
+.detail-value {
+    text-align: right;
+    color: #666;
+}
+
+/* Barra lateral para "Mis productos" */
+.sidebar-cart {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 300px;
+    height: 100%;
+    background-color: #f4f4f8;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    z-index: 10; /* Asegura que la barra lateral esté encima del contenido */
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(100%); /* Oculta la barra por defecto */
+}
+
+.sidebar-cart.active {
+    transform: translateX(0); /* Muestra la barra lateral cuando está activa */
+}
+
+.sidebar-cart h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #333;
+    text-align: center;
+}
+
+.cart-buttons {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.pay-button {
+    padding: 10px;
+    background-color: #0778a6;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.pay-button:hover {
+    background-color: #45bfef;
+}
+
+/* Pie de página */
+.footer-footer {
+    margin-top: auto; /* Mantiene el footer al final del contenedor */
+    padding: 10px 0; /* Espaciado interno para mayor legibilidad */
+    text-align: center;
+    background-color: #9C744B;
+    color: #555;
+    font-size: 0.9rem;
+    border-top: 1px solid #ddd;
+}
+
+/* Botón "Continuar compra" */
+.continue-shopping-button {
+    margin-top: 20px;
+    padding: 10px 15px;
+    background-color: #0778a6; /* Color verde para indicar acción positiva */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    text-align: center;
+  }
+  
+  .continue-shopping-button:hover {
+    background-color: #8ad1ee; /* Tonalidad más oscura al pasar el mouse */
+  }
+  
+
+/* Mejora en el diseño responsivo */
+@media (max-width: 768px) {
+    .checkout-container {
+        padding-right: 0; /* Elimina el espacio de la barra lateral */
+    }
+
+    .sidebar-cart {
+        width: 100%; /* Barra lateral ocupa todo el ancho en pantallas pequeñas */
+        height: auto;
+        position: static; /* Se coloca debajo del contenido principal */
+        transform: none; /* Sin efecto de deslizamiento */
+        box-shadow: none; /* Elimina la sombra */
+    }
+
+    .pay-button {
+        font-size: 14px; /* Reduce el tamaño del texto */
+    }
+}

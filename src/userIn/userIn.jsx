@@ -4,8 +4,9 @@ import { faUser, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
 import './userIn.css';
 import backendConfig from '../backEnd.json';
+import CardShop from '../card-shop/card-shop';
 
-function UserIn({carrito}) {
+function UserIn({ carrito, handleUpdateQuantity, handleRemoveItem }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -277,13 +278,13 @@ const validatePassword = (password) => {
   const handleLogin = (e, p) => {
     const options = {
       method: 'POST',
-    headers: {
+      headers: {
         'Content-Type': 'application/json',
-    },
-      body: JSON.stringify({"email": e, "password": p }),
+      },
+      body: JSON.stringify({ email: e, password: p }),
     };
-    
-    fetch(`${backendConfig.host}auth/login`, options)
+  
+    fetch(`http://localhost:8080/auth/login`, options)
       .then((response) => {
         if (!response.ok) {
           Swal.fire({
@@ -293,15 +294,36 @@ const validatePassword = (password) => {
             css: {
               'font-family': 'Arial, sans-serif',
               'font-size': '16px',
-           
-            }
+            },
           });
+          throw new Error('Correo o contraseña incorrectos'); // Interrumpe la cadena de promesas.
         } else {
-              window.location.href = '/home';
+          return response.json(); // Convierte la respuesta a JSON.
         }
-        return response.json();
-      }).catch((err) => {
-        console.log(err);
+      })
+      .then((data) => {
+        console.log('Respuesta del servidor:', data);
+  
+        // Guardar datos en cookies
+        document.cookie = `direccion=${encodeURIComponent(data.direccion)}; path=/`;
+        document.cookie = `documento=${encodeURIComponent(data.documento)}; path=/`;
+        document.cookie = `email=${encodeURIComponent(data.email)}; path=/`;
+        document.cookie = `fechaCreacion=${encodeURIComponent(data.fechaCreacion)}; path=/`;
+        document.cookie = `fechaNacimiento=${encodeURIComponent(data.fechaNacimiento)}; path=/`;
+        document.cookie = `isActive=${data.isActive}; path=/`;
+        document.cookie = `primerApellido=${encodeURIComponent(data.primerApellido)}; path=/`;
+        document.cookie = `primerNombre=${encodeURIComponent(data.primerNombre)}; path=/`;
+        document.cookie = `roles=${encodeURIComponent(JSON.stringify(data.roles))}; path=/`;
+        document.cookie = `segundoApellido=${encodeURIComponent(data.segundoApellido)}; path=/`;
+        document.cookie = `segundoNombre=${encodeURIComponent(data.segundoNombre)}; path=/`;
+        document.cookie = `telefono=${data.telefono}; path=/`;
+        document.cookie = `token=${data.token}; path=/`;
+  
+        // Redireccionar si es necesario
+        // window.location.href = '/home';
+      })
+      .catch((err) => {
+        console.error('Error:', err);
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
@@ -309,6 +331,8 @@ const validatePassword = (password) => {
         });
       });
   };
+  
+  
 
   const sendEmail = async (e) => {
     try {
@@ -390,7 +414,34 @@ const validatePassword = (password) => {
         });
       });
   };
-  
+
+  const getCookies = () => {
+    const cookies = document.cookie.split("; ").reduce((acc, current) => {
+      const [key, value] = current.split("=");
+      acc[key] = decodeURIComponent(value);
+      return acc;
+    }, {});
+    return cookies;
+  };
+ 
+  const handleBill = () => {
+    // Validar si existe la cookie "documento"
+    const cookies = getCookies();
+    if (!cookies.documento) {
+      Swal.fire({
+        title: "Inicia sesión",
+        text: "Debes iniciar sesión antes de continuar con el pago.",
+        icon: "warning",
+        confirmButtonText: "Aceptar",
+      });
+      return;
+    }
+
+    // Continuar con el proceso de pago
+    console.log("Documento encontrado. Continuar con el pago.");
+    // Aquí puedes redirigir o manejar la lógica del pago
+    window.location.href = '/bill';
+  };
 
   return (
     <div className="user-in-container-user-In">
@@ -413,17 +464,23 @@ const validatePassword = (password) => {
 
        {/* Barra lateral del carrito */}
        <div className={`sidebar-cart ${isCartOpen ? 'active' : ''}`}>
-        <h3>Mis productos</h3>
-        <div class="cart-item">
+        <center><h3>Mis productos</h3></center>
+        {/* <div class="cart-item">
           <img src="https://vpinteriorismo.com/8107-large_default/pieza-decorativa-etnica-metal-marmol-n1.jpg" alt="Producto X" class="cart-item-image" />
           <div class="cart-item-details">
             <h4 class="cart-item-name">Producto X</h4>
             <p class="cart-item-price">$120,000</p>
           </div>
-        </div>
+        </div> */}
+        <CardShop
+          carrito={carrito}
+          onUpdateQuantity={handleUpdateQuantity}
+          onRemoveItem={handleRemoveItem}
+        />
+
 
         <div className="cart-buttons">
-          <button className="pay-button">Ir a pagar</button>
+          <button className="pay-button" onClick={handleBill}>Ir a pagar</button>
           <button className="continue-button" onClick={closeCart}>Seguir comprando</button>
         </div>
       </div>
