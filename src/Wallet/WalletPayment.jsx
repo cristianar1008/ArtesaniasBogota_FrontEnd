@@ -1,44 +1,60 @@
 import React, { useEffect, useState } from 'react';
 import { Wallet } from '@mercadopago/sdk-react';
 
+
+
 const WalletPayment = () => {
   const [preferenceId, setPreferenceId] = useState(null);
 
+
   useEffect(() => {
-    // Llama al backend para generar la preferencia
-    fetch('https://api.mercadopago.com/checkout/preferences/2079614828-d15159b1-a463-4006-9e91-5c8e92df2420', {
-      method: 'POST',
+    // Función para obtener el valor de una cookie
+    const getCookie = (name) => {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    };
+
+    const facturaId = getCookie('facturaId'); // Obtén la cookie "facturaId"
+
+    if (!facturaId) {
+      console.error('No se encontró la cookie facturaId');
+      return;
+    }
+
+    // Llama al backend para generar la preferencia usando el id de la factura
+    fetch(`http://localhost:8081/api/pagos/crear-preferencia/by-factura/${facturaId}`, {
+      method: 'GET',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        titulo: 'Producto de ejemplo',
-        cantidad: 1,
-        precio: 100.0,
-      }),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        setPreferenceId(data.preferenceId); // Ajusta según cómo tu backend devuelva la preferencia
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Error en la solicitud al backend');
+        }
+        return response.text(); // Cambia a .text() porque la respuesta no es JSON
       })
-      .catch((error) => console.error('Error al generar preferencia:', error));
+      .then((data) => {
+        console.log('Preferencia obtenida:', data); // Verifica la respuesta
+        setPreferenceId(data); // Almacena directamente el texto como el preferenceId
+      })
+      .catch((error) => {
+        console.error('Error al generar preferencia:', error);
+      });
   }, []);
 
   return (
     <div>
-      <h2>Finalizar Compra</h2>
       {preferenceId ? (
         <Wallet
-          initialization={{ preferenceId }}
-          customization={{
-            texts: {
-              valueProp: 'Paga de manera segura con Mercado Pago',
-            },
+          initialization={{
+            preferenceId: preferenceId,
           }}
         />
       ) : (
-        <p>Cargando opciones de pago...</p>
+        <p>Cargando...</p>
       )}
     </div>
   );
 };
 
-export default WalletPayment;
+export default WalletPayment;

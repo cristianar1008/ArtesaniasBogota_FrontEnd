@@ -3,6 +3,7 @@ import "./Bill.css";
 import Footer from "../footer/footer";
 import CardShop from "../card-shop/card-shop";
 import Swal from "sweetalert2";
+import WalletPayment from "../Wallet/WalletPayment"
 
 // Función para leer cookies
 const getCookies = () => {
@@ -194,9 +195,10 @@ const Redirect = () => {
                 </div>
               </div>
             )}
-            <button className="continue-shopping-button" onClick={handleCreateInvoice}>
-              Continuar compra
-            </button>
+            <div>
+              <h2>Pagar con: </h2>
+              <WalletPayment />
+            </div>
           </div>
         </div>
 
