@@ -513,7 +513,7 @@ const validatePassword = (password) => {
 
        {/* Barra lateral del carrito */}
        <div className={`sidebar-cart ${isCartOpen ? 'active' : ''}`}>
-        <center><h3>Mis productos</h3></center>
+        <center><h3>Comprar</h3></center>
         {/* <div class="cart-item">
           <img src="https://vpinteriorismo.com/8107-large_default/pieza-decorativa-etnica-metal-marmol-n1.jpg" alt="Producto X" class="cart-item-image" />
           <div class="cart-item-details">

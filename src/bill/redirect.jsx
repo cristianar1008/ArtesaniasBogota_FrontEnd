@@ -21,7 +21,7 @@ const setCookie = (name, value) => {
   document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
 };
 
-const Bill = () => {
+const Redirect = () => {
   const [userInfo, setUserInfo] = useState({});
   const [carrito, setCarrito] = useState([]);
 
@@ -119,7 +119,7 @@ const Bill = () => {
   
       // Validar el código de estado de la respuesta
       if (response.status === 200) {
-        
+       
         Swal.fire({
           icon: "success",
           title: "Productos Agregados",
@@ -140,7 +140,6 @@ const Bill = () => {
         text: "No se pudo registrar los productos en la factura.",
       });
     }
-    window.location.href = 'pago/redirect';
   };
   
 
@@ -162,8 +161,8 @@ const Bill = () => {
         {/* Panel principal */}
         <div className="main-panel">
           <div className="stepper">
-            <div className="step active">1. Información personal</div>
-            <div className="step">2. Pago</div>
+            <div className="step">1. Información personal</div>
+            <div className="step active">2. Pago</div>
           </div>
 
           <div className="user-info-section">
@@ -221,5 +220,4 @@ const Bill = () => {
   );
 };
 
-export default Bill;
-
+export default Redirect;

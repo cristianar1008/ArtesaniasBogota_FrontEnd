@@ -5,6 +5,7 @@ import App from './App';
 import './index.css';
 import Home from './home/home';
 import Bill from './bill/bill';
+import Redirect from './bill/redirect';
 
 
 const AppRoutes = () => {
@@ -15,6 +16,7 @@ const AppRoutes = () => {
                 <Route path="/home" element={<Home />} />
                 <Route path="/userAdmin" element={<Home />} />
                 <Route path="/bill" element={<Bill />} />
+                <Route path="/pago/redirect" element={<Redirect />} />
             </Routes>
         </Router>
     );
