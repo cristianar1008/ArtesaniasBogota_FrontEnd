@@ -1,5 +1,5 @@
 import './card.css';
-
+import axios from "axios";
 function Card({ id, titulo, categoria, descripcion, precio, imagen, calificacion, onAddToCart }) {
   const renderStars = (rating) => {
     const stars = [];
@@ -14,6 +14,7 @@ function Card({ id, titulo, categoria, descripcion, precio, imagen, calificacion
   const handleAddToCart = () => {
     onAddToCart(id); // Llamamos la función con el id del producto
   };
+
 
   return (
     <>

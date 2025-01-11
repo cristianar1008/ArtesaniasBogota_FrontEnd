@@ -5,6 +5,11 @@ import DropDownMenu from "./dropdown-menu/dropdownMenu";
 import Card from "./card/card";
 import Footer from "./footer/footer";
 import Head from "./head/head";
+import { initMercadoPago } from "@mercadopago/sdk-react";
+import WalletPayment from "./Wallet/WalletPayment";
+
+// Inicializa Mercado Pago con tu clave pública
+initMercadoPago("APP_USR-8cd121fa-5fc8-4570-8acb-f3a7d9430bae");
 
 // Funciones para manejar cookies
 const setCookie = (name, value, days) => {
@@ -118,6 +123,9 @@ function App() {
                 onAddToCart={handleAddToCart}
               />
             ))}
+          </div>
+          <div>
+            <WalletPayment />
           </div>
         </div>
       </div>
