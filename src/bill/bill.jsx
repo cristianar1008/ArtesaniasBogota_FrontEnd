@@ -106,6 +106,8 @@ const Bill = () => {
         idProducto: producto.id,
         cantidad: producto.cantidad,
       }));
+      console.log("productosFactura")
+      console.log(productosFactura)
   
       const response = await fetch("http://localhost:8081/api/facturas/agregar-productos", {
         method: "POST",
@@ -117,6 +119,7 @@ const Bill = () => {
   
       // Validar el código de estado de la respuesta
       if (response.status === 200) {
+       
         Swal.fire({
           icon: "success",
           title: "Productos Agregados",

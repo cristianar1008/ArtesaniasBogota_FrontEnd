@@ -6,7 +6,7 @@ import UserIn from '../userIn/userIn';
 
 
 function Head({ carrito, handleUpdateQuantity, handleRemoveItem }) {
-  console.log(carrito)
+
   return (
     <> 
       <div className="navbar">

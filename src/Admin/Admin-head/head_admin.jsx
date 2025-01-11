@@ -5,7 +5,7 @@ import { faFacebookF, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import UserIn_Admin from '../Admin-userIn/userIn-Admin';
 
 
-function HeadAdmin({toggleVisibilityWelcome}) {
+function HeadAdmin() {
  
   return (
     <> 
@@ -16,7 +16,7 @@ function HeadAdmin({toggleVisibilityWelcome}) {
 
       </div>
       <div className="user-icons">
-          <UserIn_Admin toggleVisibilityWelcome ={toggleVisibilityWelcome}></UserIn_Admin>
+          <UserIn_Admin></UserIn_Admin>
       </div>
     </div>
 

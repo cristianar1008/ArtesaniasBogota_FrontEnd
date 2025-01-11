@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import './userIn-Admin.css';
 import backendConfig from '../../backEnd.json';
 
-function UserIn_Admin({toggleVisibilityWelcome}) {
+function UserIn_Admin() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -295,7 +295,7 @@ function UserIn_Admin({toggleVisibilityWelcome}) {
   return (
     <div className="user-in-container-user-In">
 
-     <div className="icon-wrapper-user-In" onClick={toggleVisibilityWelcome}>
+     <div className="icon-wrapper-user-In" >
         <FontAwesomeIcon icon={faUserTie} className="icon-spacing-user-In" />
         <span className="icon-label">Usuarios</span>
       </div>

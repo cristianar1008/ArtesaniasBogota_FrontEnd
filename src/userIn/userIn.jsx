@@ -4,6 +4,7 @@ import { faUser, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
 import './userIn.css';
 import backendConfig from '../backEnd.json';
+import { faUserTie } from '@fortawesome/free-solid-svg-icons';
 import CardShop from '../card-shop/card-shop';
 
 function UserIn({ carrito, handleUpdateQuantity, handleRemoveItem }) {
@@ -14,6 +15,7 @@ function UserIn({ carrito, handleUpdateQuantity, handleRemoveItem }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  
   const showLoginModal = () => {
     Swal.fire({
       title: 'Iniciar sesión',
@@ -176,17 +178,7 @@ function UserIn({ carrito, handleUpdateQuantity, handleRemoveItem }) {
                 direccion,
                 password,
                 email)
-            // handleRegister(documento,
-            //   fechaNacimiento,
-            //   telefono,
-            //   primerNombre,
-            //   segundoNombre,
-            //   primerApellido,
-            //   segundoApellido,
-            //   direccion,
-            //   password,
-            //   email
-            //   );
+            
         }
     });
 };
@@ -320,7 +312,7 @@ const validatePassword = (password) => {
         document.cookie = `token=${data.token}; path=/`;
   
         // Redireccionar si es necesario
-        // window.location.href = '/home';
+        window.location.reload();
       })
       .catch((err) => {
         console.error('Error:', err);
@@ -418,12 +410,36 @@ const validatePassword = (password) => {
   const getCookies = () => {
     const cookies = document.cookie.split("; ").reduce((acc, current) => {
       const [key, value] = current.split("=");
-      acc[key] = decodeURIComponent(value);
+      acc[key] = decodeURIComponent(value || ""); // Asegura un valor vacío si no existe.
       return acc;
     }, {});
     return cookies;
   };
  
+  const isCookieEmptyOrMissing = (cookieName) => {
+    const cookies = document.cookie.split("; ").reduce((acc, current) => {
+      const [key, value] = current.split("=");
+      acc[key] = decodeURIComponent(value || ""); // Asegura un valor vacío si no existe.
+      return acc;
+    }, {});
+  
+    return !cookies[cookieName] || cookies[cookieName].trim() === ""; // Retorna true si la cookie no existe o está vacía.
+  };
+
+  const deleteAllCookiesAndRefresh = () => {
+    // Borrar todas las cookies
+    const cookies = document.cookie.split("; ");
+    cookies.forEach(cookie => {
+      const cookieName = cookie.split("=")[0];
+      document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+    });
+  
+    // Recargar la página
+    window.location.reload();
+  };
+  
+
+  
   const handleBill = () => {
     // Validar si existe la cookie "documento"
     const cookies = getCookies();
@@ -443,18 +459,51 @@ const validatePassword = (password) => {
     window.location.href = '/bill';
   };
 
+  const redirectToUserAdmin = () => {
+    window.location.href = '/home';
+  };
+  
+  
   return (
     <div className="user-in-container-user-In">
-      <div className="icon-wrapper-user-In" onClick={toggleMenu}>
-        <FontAwesomeIcon icon={faUser} className="icon-spacing-user-In" />
-        <span className="icon-label">Mi cuenta</span>
-        {isMenuOpen && (
-          <div className="dropdown-menu-user-In">
-            <div className="menu-item-user-In" onClick={showLoginModal}>Iniciar sesión</div>
-            <div className="menu-item-user-In" onClick={showRegisterModal}>Registrarse</div>
-          </div>
-        )}
+      
+      {isCookieEmptyOrMissing("documento") ? (
+  // Si la cookie está vacía o no existe
+  <div className="icon-wrapper-user-In" onClick={toggleMenu}>
+    <FontAwesomeIcon icon={faUser} className="icon-spacing-user-In" />
+    <span className="icon-label">Mi cuenta</span>
+    {isMenuOpen && (
+      <div className="dropdown-menu-user-In">
+        <div className="menu-item-user-In" onClick={showLoginModal}>Iniciar sesión</div>
+        <div className="menu-item-user-In" onClick={showRegisterModal}>Registrarse</div>
       </div>
+    )}
+      </div>
+    ) : (
+      // Si la cookie tiene algún valor
+      <>
+        <div className="icon-wrapper-user-In" >
+          <FontAwesomeIcon icon={faUserTie} className="icon-spacing-user-In" />
+          <span className="icon-label" onClick={redirectToUserAdmin}>Usuarios</span>
+        </div>
+
+        <div className="icon-wrapper-user-In" onClick={toggleMenu}>
+          <FontAwesomeIcon icon={faUser} className="icon-spacing-user-In" />
+          <span className="icon-label">Mi cuenta</span>
+          {isMenuOpen && (
+            <div className="dropdown-menu-user-In">
+              <div className="menu-item-user-In" onClick={showLoginModal}>Mi perfil</div>
+              <div className="menu-item-user-In" onClick={showRegisterModal}>Actualizar contraseña</div>
+              <div className="menu-item-user-In" onClick={deleteAllCookiesAndRefresh}>Cerrar sesión</div>
+            </div>
+          )}
+        </div>
+      </>
+    )}
+        
+        
+
+  
 
       <div className="icon-wrapper-user-In" onClick={toggleCart}>
         <FontAwesomeIcon icon={faShoppingCart} className="icon-spacing-user-In" />
