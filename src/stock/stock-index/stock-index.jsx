@@ -3,10 +3,9 @@ import { useState } from 'react';
 import ProductDataTable from './stock-datatable';
 
 function StockIndex() {
-const [selectedProduct, setSelectedProduct] = useState(null); // Usuario seleccionado
+  const [selectedProduct, setSelectedProduct] = useState(null); // Usuario seleccionado
 
-
-const apiUrl_artesanias = import.meta.env.VITE_APP_API_URL_ARTESANIAS;
+  const apiUrl_artesanias = import.meta.env.VITE_APP_API_URL_ARTESANIAS;
 
   // Mostrar modal de producto (registro)
   const showProductModal = () => {
@@ -15,20 +14,13 @@ const apiUrl_artesanias = import.meta.env.VITE_APP_API_URL_ARTESANIAS;
       html: `
         <input type="text" id="nombre" class="swal2-input" placeholder="Nombre del producto" required />
         <textarea 
-        id="descripcion" 
-        class="swal2-input" 
-        placeholder="Descripción del producto" 
-        required 
-        style="width: 75%; height: 100px;"
+          id="descripcion" 
+          class="swal2-input" 
+          placeholder="Descripción del producto" 
+          required 
+          style="width: 75%; height: 100px;"
         ></textarea>
         <input type="number" id="precioUnitario" class="swal2-input" placeholder="Precio unitario" required />
-        <input type="file" id="imagen" class="swal2-input" accept="image/*" required />
-        <select id="sede" class="swal2-input" required>
-          <option value="" disabled selected>Selecciona una sede</option>
-          <option value="1">Sede 1</option>
-          <option value="2">Sede 2</option>
-          <option value="3">Sede 3</option>
-        </select>
       `,
       showCloseButton: true,
       showCancelButton: true,
@@ -37,32 +29,25 @@ const apiUrl_artesanias = import.meta.env.VITE_APP_API_URL_ARTESANIAS;
         const nombre = Swal.getPopup().querySelector('#nombre').value;
         const descripcion = Swal.getPopup().querySelector('#descripcion').value;
         const precioUnitario = Swal.getPopup().querySelector('#precioUnitario').value;
-        const imagenFile = Swal.getPopup().querySelector('#imagen').files[0];
-        const sede = Swal.getPopup().querySelector('#sede').value;
 
-        if (!nombre || !descripcion || !precioUnitario || !imagenFile || !sede) {
+        if (!nombre || !descripcion || !precioUnitario) {
           Swal.showValidationMessage('Por favor, completa todos los campos');
           return false;
         }
 
         return new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onload = () => {
-            resolve({
-              nombre,
-              descripcion,
-              precioUnitario: parseInt(precioUnitario),
-              calificacion: 4, // Valor por defecto
-              imagen: reader.result,
-              sede: parseInt(sede, 10),
-              idCategoriaProducto: 1,
-              colorProductosId: 1,
-              oficioId: 1,
-              coleccionProductosId: 1,
-              artistasProductosId: 1,
-            });
-          };
-          reader.readAsDataURL(imagenFile);
+          resolve({
+            nombre,
+            descripcion,
+            precioUnitario: parseInt(precioUnitario),
+            calificacion: Math.floor(Math.random() * 4) + 2,
+            imagen: "https://xxxx.com", // Imagen por defecto
+            idCategoriaProducto: 1,
+            colorProductosId: 1,
+            oficioId: 1,
+            coleccionProductosId: 1,
+            artistasProductosId: 1,
+          });
         });
       },
     }).then((result) => {
@@ -110,4 +95,3 @@ const apiUrl_artesanias = import.meta.env.VITE_APP_API_URL_ARTESANIAS;
 }
 
 export default StockIndex;
-
