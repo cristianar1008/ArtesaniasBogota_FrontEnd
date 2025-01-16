@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faWarehouse, faUserTie, faUser, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
 import './userIn.css';
-import backendConfig from '../backEnd.json';
-import { faUserTie } from '@fortawesome/free-solid-svg-icons';
+
 import CardShop from '../card-shop/card-shop';
 
 function UserIn({ carrito, handleUpdateQuantity, handleRemoveItem }) {
@@ -463,9 +462,13 @@ const validatePassword = (password) => {
     window.location.href = '/home';
   };
   
+  const showStock = () =>{
+    window.location.href = '/stock';
+  }
   
   return (
     <div className="user-in-container-user-In">
+      
       
       {isCookieEmptyOrMissing("documento") ? (
   // Si la cookie está vacía o no existe
@@ -482,6 +485,11 @@ const validatePassword = (password) => {
     ) : (
       // Si la cookie tiene algún valor
       <>
+      <div className="icon-wrapper-user-In">
+            <FontAwesomeIcon icon={faWarehouse} onClick={showStock} className="icon-spacing-user-In" />
+            <span className="icon-label">Inventario</span>
+          </div>
+
         <div className="icon-wrapper-user-In" >
           <FontAwesomeIcon icon={faUserTie} className="icon-spacing-user-In" />
           <span className="icon-label" onClick={redirectToUserAdmin}>Usuarios</span>
@@ -498,6 +506,8 @@ const validatePassword = (password) => {
             </div>
           )}
         </div>
+
+        
       </>
     )}
         
@@ -509,6 +519,11 @@ const validatePassword = (password) => {
         <FontAwesomeIcon icon={faShoppingCart} className="icon-spacing-user-In" />
         <span className="icon-label">Mi carrito</span>
       </div>
+
+      <div className="icon-wrapper-user-In">
+              <FontAwesomeIcon icon={faHome} className="icon-spacing-user-In" onClick={() => window.location.href = '/'} />
+              <span className="icon-label">Inicio</span>
+        </div>
 
 
        {/* Barra lateral del carrito */}

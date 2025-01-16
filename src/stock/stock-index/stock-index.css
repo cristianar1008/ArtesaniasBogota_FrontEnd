@@ -1,0 +1,56 @@
+.container-body{
+    height: 100%;
+    text-align: center;
+}
+.buttonRegister {
+    display: inline-block; /* Asegura que el botón se comporte como elemento en línea */
+    height: 50px;
+    width: 200px;
+    background-color: #0778a6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center; /* Alinea el texto dentro del botón */
+}
+.buttonEdit {
+    display: inline-block; /* Asegura que el botón se comporte como elemento en línea */
+    height: 50px;
+    width: 200px;
+    background-color: #0778a6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center; /* Alinea el texto dentro del botón */
+}
+
+
+
+/* Modificaciones a todo el contenedor de Sweet Alert */
+.swal-title {
+    font-family: 'Arial', sans-serif;
+    font-size: 25px;
+
+}
+
+.swal2-input {
+    width: 80%;
+    margin-bottom: 15px;
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+}
+
+  /* Cambiar color al pasar el cursor */
+  .btn-confirm:hover {
+    background-color: #45bfef; /* Verde oscuro */
+}
+
+/* Botón de Confirmación (Iniciar Sesión) */
+.btn-confirm {
+    background-color: #0778a6;  /* Aquí el punto y coma es innecesario */
+    width: 360px;
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+}
+  
