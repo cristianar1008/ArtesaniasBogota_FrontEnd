@@ -3,7 +3,11 @@ import { DataGrid } from '@mui/x-data-grid';
 import { TextField, Box, Checkbox, Switch } from '@mui/material';
 import axios from 'axios';
 
+
 const AdminUserDataTable = ({ onUserSelect }) => {
+
+  const apiUrl_artesanias = import.meta.env.VITE_APP_API_URL_ARTESANIAS;
+
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filterText, setFilterText] = useState('');
@@ -11,7 +15,7 @@ const AdminUserDataTable = ({ onUserSelect }) => {
 
   // Obtener lista de usuarios
   useEffect(() => {
-    axios.get('http://localhost:8081/api/usuarios/list')
+    axios.get(`${apiUrl_artesanias}/api/usuarios/list`)
       .then((response) => {
         const formattedData = response.data.map((user) => ({
           ...user,
@@ -57,7 +61,7 @@ const AdminUserDataTable = ({ onUserSelect }) => {
 
     // Actualizar el backend con el nuevo estado
     axios
-      .put(`http://localhost:8081/api/usuarios/activar?id=${id}`, { activo: isActive })
+      .put(`${apiUrl_artesanias}/api/usuarios/activar?id=${id}`, { activo: isActive })
       .then(() => {
         console.log(`Usuario ${id} actualizado a estado ${isActive ? 'Activo' : 'Inactivo'}`);
       })

@@ -1,6 +1,9 @@
 import './card.css';
 import axios from "axios";
 function Card({ id, titulo, categoria, descripcion, precio, imagen, calificacion, onAddToCart }) {
+
+  
+
   const renderStars = (rating) => {
     const stars = [];
     for (let i = 0; i < 5; i++) {

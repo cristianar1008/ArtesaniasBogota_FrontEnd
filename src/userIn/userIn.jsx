@@ -13,6 +13,8 @@ function UserIn({ carrito, handleUpdateQuantity, handleRemoveItem }) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+ 
+  const apiUrl_artesanias = import.meta.env.VITE_APP_API_URL_ARTESANIAS;
 
   
   const showLoginModal = () => {
@@ -275,7 +277,7 @@ const validatePassword = (password) => {
       body: JSON.stringify({ email: e, password: p }),
     };
   
-    fetch(`http://localhost:8080/auth/login`, options)
+    fetch(`${apiUrl_artesanias}/auth/login`, options)
       .then((response) => {
         if (!response.ok) {
           Swal.fire({
@@ -327,7 +329,7 @@ const validatePassword = (password) => {
 
   const sendEmail = async (e) => {
     try {
-        const response = await fetch("http://localhost:8081/api/email_auth", {
+        const response = await fetch(`${apiUrl_artesanias}/api/email_auth`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -376,7 +378,7 @@ const validatePassword = (password) => {
     };
     console.log(options)
   
-    fetch('http://localhost:8081/api/usuarios/create/cliente', options)
+    fetch(`${apiUrl_artesanias}/api/usuarios/create/cliente`, options)
       .then((response) => {
         console.log(response)
         if (response.ok == false) {

@@ -5,6 +5,7 @@ import { Wallet } from '@mercadopago/sdk-react';
 
 const WalletPayment = () => {
   const [preferenceId, setPreferenceId] = useState(null);
+  const apiUrl_artesanias = import.meta.env.VITE_APP_API_URL_ARTESANIAS;
 
 
   useEffect(() => {
@@ -23,7 +24,7 @@ const WalletPayment = () => {
     }
 
     // Llama al backend para generar la preferencia usando el id de la factura
-    fetch(`http://localhost:8081/api/pagos/crear-preferencia/by-factura/${facturaId}`, {
+    fetch(`${apiUrl_artesanias}/api/pagos/crear-preferencia/by-factura/${facturaId}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })

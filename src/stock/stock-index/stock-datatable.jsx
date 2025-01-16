@@ -10,9 +10,11 @@ const ProductDataTable = ({ onProductSelect }) => {
   const [selectedProductId, setSelectedProductId] = useState(null);
   
 
+  const apiUrl_artesanias = import.meta.env.VITE_APP_API_URL_ARTESANIAS;
+
   // Obtener lista de productos
   useEffect(() => {
-    axios.get('http://localhost:8081/api/productos/productos')
+    axios.get(`${apiUrl_artesanias}/api/productos/productos`)
       .then((response) => {
         const formattedData = response.data.map((product) => ({
           ...product,

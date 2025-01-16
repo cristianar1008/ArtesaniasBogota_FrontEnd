@@ -4,6 +4,9 @@ import AdminUserDataTable from './Admin-user-dataTable';
 import Swal from 'sweetalert2';
 
 function AdminUserIndex() {
+  
+  const apiUrl_artesanias = import.meta.env.VITE_APP_API_URL_ARTESANIAS;
+
   const [selectedUser, setSelectedUser] = useState(null); // Usuario seleccionado
 
   // Función para formatear fecha al formato `yyyy-MM-dd` para campos de tipo `date`
@@ -76,7 +79,7 @@ function AdminUserIndex() {
 
   // Registrar usuario
   const handleRegister = (userData) => {
-    fetch('/api/register', {
+    fetch(`${apiUrl_artesanias}/api/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -99,7 +102,7 @@ function AdminUserIndex() {
 
   // Modificar usuario
   const handleUpdate = (userData) => {
-    fetch(`/api/usuarios/update?id=${userData.documento}`, {
+    fetch(`${apiUrl_artesanias}/api/usuarios/update?id=${userData.documento}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

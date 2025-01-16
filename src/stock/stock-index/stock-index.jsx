@@ -5,6 +5,9 @@ import ProductDataTable from './stock-datatable';
 function StockIndex() {
 const [selectedProduct, setSelectedProduct] = useState(null); // Usuario seleccionado
 
+
+const apiUrl_artesanias = import.meta.env.VITE_APP_API_URL_ARTESANIAS;
+
   // Mostrar modal de producto (registro)
   const showProductModal = () => {
     Swal.fire({
@@ -48,7 +51,7 @@ const [selectedProduct, setSelectedProduct] = useState(null); // Usuario selecci
             resolve({
               nombre,
               descripcion,
-              precioUnitario: parseFloat(precioUnitario),
+              precioUnitario: parseInt(precioUnitario),
               calificacion: 4, // Valor por defecto
               imagen: reader.result,
               sede: parseInt(sede, 10),
@@ -72,7 +75,7 @@ const [selectedProduct, setSelectedProduct] = useState(null); // Usuario selecci
 
   // Registrar producto
   const handleRegister = (productData) => {
-    fetch('http://localhost:8081/api/productos/create', {
+    fetch(`${apiUrl_artesanias}/api/productos/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

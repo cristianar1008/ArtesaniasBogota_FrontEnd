@@ -26,6 +26,8 @@ const Redirect = () => {
   const [userInfo, setUserInfo] = useState({});
   const [carrito, setCarrito] = useState([]);
 
+  const apiUrl_artesanias = import.meta.env.VITE_APP_API_URL_ARTESANIAS;
+
   // Cargar datos del usuario y carrito desde las cookies
   useEffect(() => {
     const cookies = getCookies();
@@ -57,7 +59,7 @@ const Redirect = () => {
 
     try {
       // Crear factura
-      const response = await fetch("http://localhost:8081/api/facturas/crear", {
+      const response = await fetch(`${apiUrl_artesanias}/api/facturas/crear`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -110,7 +112,7 @@ const Redirect = () => {
       console.log("productosFactura")
       console.log(productosFactura)
   
-      const response = await fetch("http://localhost:8081/api/facturas/agregar-productos", {
+      const response = await fetch(`${apiUrl_artesanias}/api/facturas/agregar-productos`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
