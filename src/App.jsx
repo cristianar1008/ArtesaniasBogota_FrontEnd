@@ -25,6 +25,8 @@ const getCookie = (name) => {
 };
 
 function App() {
+
+  const apiUrl_artesanias = import.meta.env.VITE_APP_API_URL_ARTESANIAS;
   const [productos, setProductos] = useState([]);
   const [carrito, setCarrito] = useState([]);
 
@@ -43,7 +45,7 @@ function App() {
 
   // Llamada a la API para obtener los productos
   useEffect(() => {
-    fetch("http://localhost:8081/api/productos/productos")
+    fetch(apiUrl_artesanias+'/api/productos/productos')
       .then((response) => response.json())
       .then((data) => {
         const productosTransformados = data.map((producto) => ({
@@ -64,7 +66,7 @@ function App() {
 
   const handleAddToCart = async (id) => {
     try {
-      const response = await fetch(`http://localhost:8081/api/productos/producto/${id}`);
+      const response = await fetch(`${apiUrl_artesanias}/api/productos/producto/${id}`);
       const producto = await response.json();
 
       setCarrito((prevCarrito) => {

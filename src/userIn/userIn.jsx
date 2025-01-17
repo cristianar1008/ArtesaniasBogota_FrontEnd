@@ -15,6 +15,7 @@ function UserIn({ carrito, handleUpdateQuantity, handleRemoveItem }) {
   const [password, setPassword] = useState('');
  
   const apiUrl_artesanias = import.meta.env.VITE_APP_API_URL_ARTESANIAS;
+  const apiUrl_login = import.meta.env.VITE_APP_API_URL_LOGIN;
 
   
   const showLoginModal = () => {
@@ -277,7 +278,7 @@ const validatePassword = (password) => {
       body: JSON.stringify({ email: e, password: p }),
     };
   
-    fetch(`${apiUrl_artesanias}/auth/login`, options)
+    fetch(`${apiUrl_login}/auth/login`, options)
       .then((response) => {
         if (!response.ok) {
           Swal.fire({
