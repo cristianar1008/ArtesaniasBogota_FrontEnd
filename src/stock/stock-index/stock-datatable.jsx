@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { TextField, Box } from '@mui/material';
+import { TextField, Box, Button, IconButton, Checkbox } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import Swal from 'sweetalert2';
 import axios from 'axios';
 
 const ProductDataTable = ({ onProductSelect }) => {
@@ -8,7 +11,6 @@ const ProductDataTable = ({ onProductSelect }) => {
   const [loading, setLoading] = useState(true);
   const [filterText, setFilterText] = useState('');
   const [selectedProductId, setSelectedProductId] = useState(null);
-  
 
   const apiUrl_artesanias = import.meta.env.VITE_APP_API_URL_ARTESANIAS;
 
@@ -36,19 +38,160 @@ const ProductDataTable = ({ onProductSelect }) => {
     )
   );
 
-  // Manejar la selección de un producto
-  const handleRowClick = (product) => {
+  // Manejar el cambio del checkbox
+  const handleCheckboxChange = (product) => {
     if (selectedProductId === product.id) {
-      setSelectedProductId(null); // Deseleccionar producto
-      onProductSelect(null); // Notificar al componente principal
+      setSelectedProductId(null);
+      onProductSelect(null);
     } else {
-      setSelectedProductId(product.id); // Seleccionar producto
-      onProductSelect(product); // Notificar al componente principal
+      setSelectedProductId(product.id);
+      onProductSelect(product);
     }
   };
 
+  // Mostrar modal de producto (modificación)
+  const showProductModal = () => {
+    const selectedProduct = rows.find((row) => row.id === selectedProductId);
+    if (!selectedProduct) {
+      Swal.fire('Error', 'No hay un producto seleccionado', 'error');
+      return;
+    }
+
+    Swal.fire({
+      title: 'Modificar producto',
+      html: `
+        <input type="text" id="id" class="swal2-input" placeholder="ID del producto" value="${selectedProduct?.id || ''}" readonly />
+        <input type="text" id="nombre" class="swal2-input" placeholder="Nombre del producto" value="${selectedProduct?.nombre || ''}" required />
+        <textarea 
+          id="descripcion" 
+          class="swal2-input" 
+          placeholder="Descripción del producto" 
+          required 
+          style="width: 75%; height: 100px;"
+        >${selectedProduct?.descripcion || ''}</textarea>
+        <input type="number" id="precioUnitario" class="swal2-input" placeholder="Precio unitario" value="${selectedProduct?.precioUnitario.replace('$', '').replace(',', '') || ''}" required />
+        <input type="number" id="calificacion" class="swal2-input" placeholder="Calificación" value="${selectedProduct?.calificacion || ''}" required />
+      `,
+      showCloseButton: true,
+      showCancelButton: true,
+      confirmButtonText: 'Modificar',
+      preConfirm: () => {
+        const id = Swal.getPopup().querySelector('#id').value;
+        const nombre = Swal.getPopup().querySelector('#nombre').value;
+        const descripcion = Swal.getPopup().querySelector('#descripcion').value;
+        const precioUnitario = parseFloat(Swal.getPopup().querySelector('#precioUnitario').value);
+        const calificacion = parseInt(Swal.getPopup().querySelector('#calificacion').value);
+
+        if (!nombre || !descripcion || isNaN(precioUnitario) || isNaN(calificacion)) {
+          Swal.showValidationMessage('Todos los campos son obligatorios y deben tener valores válidos.');
+          return false;
+        }
+
+        return { id, nombre, descripcion, precioUnitario, calificacion };
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updatedProduct = result.value;
+        handleUpdate(updatedProduct, selectedProduct.id); // Modificar producto existente
+      }
+    });
+  };
+
+  // Mostrar detalles del producto
+  const handleViewDetails = (product) => {
+    Swal.fire({
+      title: 'Detalles del Producto',
+      html: `
+        <p><strong>ID:</strong> ${product.id}</p>
+        <p><strong>Nombre:</strong> ${product.nombre}</p>
+        <p><strong>Descripción:</strong> ${product.descripcion}</p>
+        <p><strong>Precio Unitario:</strong> ${product.precioUnitario}</p>
+        <p><strong>Calificación:</strong> ${product.calificacion}</p>
+        <img src="${product.imagen}" alt="Imagen del producto" style="max-width: 100%; height: auto; margin-top: 15px;" />
+      `,
+      icon: 'info',
+      confirmButtonText: 'Cerrar',
+    });
+  };
+  
+
+  // Modificar producto
+  const handleUpdate = (productData) => {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Los cambios realizados en el producto serán guardados.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, modificar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .put(
+            'http://localhost:8081/api/inventario/actualizar-inventario/producto-puntoventa',
+            productData // Cuerpo de la solicitud con los datos del producto
+          )
+          .then(() => {
+            setRows((prevRows) =>
+              prevRows.map((row) =>
+                row.id === productData.id
+                  ? { ...row, ...productData, precioUnitario: `$${productData.precioUnitario.toLocaleString()}` }
+                  : row
+              )
+            );
+            Swal.fire('Éxito', 'Producto modificado correctamente.', 'success');
+          })
+          .catch((error) => {
+            console.error('Error al modificar el producto:', error.response?.data || error.message);
+            Swal.fire('Error', 'No se pudo modificar el producto.', 'error');
+          });
+      }
+    });
+  };
+  
+
+  // Eliminar producto
+  const handleDelete = (facturaId, itemId) => {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'El producto será eliminado permanentemente.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`http://localhost:8081/api/facturas/remove-item/${facturaId}/${itemId}`)
+          .then(() => {
+            // Actualiza los datos del DataGrid después de eliminar
+            setRows((prevRows) => prevRows.filter((row) => row.id !== itemId));
+            setSelectedProductId(null); // Deselecciona cualquier producto
+            Swal.fire('Eliminado', 'Producto eliminado correctamente.', 'success');
+          })
+          .catch((error) => {
+            console.error('Error al eliminar el producto:', error.response?.data || error.message);
+            Swal.fire('Error', 'No se pudo eliminar el producto.', 'error');
+          });
+      }
+    });
+  };
+  
+  
+
   // Definir las columnas del DataGrid
   const columns = [
+    {
+      field: 'checkbox',
+      headerName: 'Modificar',
+      flex: 0.5,
+      renderCell: (params) => (
+        <Checkbox
+          checked={selectedProductId === params.row.id}
+          onChange={() => handleCheckboxChange(params.row)}
+        />
+      ),
+    },
     {
       field: 'imagen',
       headerName: 'Imagen',
@@ -66,10 +209,50 @@ const ProductDataTable = ({ onProductSelect }) => {
     { field: 'descripcion', headerName: 'Descripción', flex: 3 },
     { field: 'precioUnitario', headerName: 'Precio Unitario', flex: 1 },
     { field: 'calificacion', headerName: 'Calificación', flex: 1 },
+    {
+      field: 'detalles',
+      headerName: 'Detalles',
+      flex: 1,
+      renderCell: (params) => (
+        <IconButton
+          color="primary"
+          onClick={() => handleViewDetails(params.row)}
+        >
+          <VisibilityIcon />
+        </IconButton>
+      ),
+    },
+    {
+      field: 'eliminar',
+      headerName: 'Eliminar Producto',
+      flex: 1,
+      renderCell: (params) => (
+        <IconButton
+          color="error"
+          onClick={() => handleDelete(params.row.facturaId, params.row.id)} // FacturaId e ItemId desde los datos
+        >
+          <DeleteIcon />
+        </IconButton>
+      ),
+    },
+    
+    
+    
   ];
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, padding: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', maxWidth: 800 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={showProductModal}
+          disabled={!selectedProductId}
+        >
+          Modificar Producto
+        </Button>
+      </Box>
+
       <TextField
         label="Buscar producto..."
         variant="outlined"
@@ -98,7 +281,7 @@ const ProductDataTable = ({ onProductSelect }) => {
             disableSelectionOnClick
             loading={loading}
             getRowId={(row) => row.id}
-            onRowClick={(params) => handleRowClick(params.row)}
+            onRowClick={(params) => setSelectedProductId(params.row.id)}
           />
         </Box>
       </Box>
