@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./Bill.css";
+import "./bill.css";
 import Footer from "../footer/footer";
 import CardShop from "../card-shop/card-shop";
 import Swal from "sweetalert2";
