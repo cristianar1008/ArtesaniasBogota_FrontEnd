@@ -2,7 +2,7 @@ import './head_admin.css'
 import logo from '../../assets/Logo.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faInstagram } from '@fortawesome/free-brands-svg-icons';
-import UserIn_Admin from '../Admin-userIn/userIn-Admin';
+import UserIn_Admin from '../Admin-userIn/userIn-admin';
 
 
 
