@@ -69,17 +69,17 @@
 }
 
 .star.filled {
-    color: #f7a700; /* Estrellas calificadas */
+    color: #f1ac13; /* Estrellas calificadas */
 }
 
 /* Efecto de hover para las estrellas (opcional) */
 .star:hover {
-    color: #ffc107;
+    color: #efbc50;
 }
 
 /* Estilos del botón */
 .add-button {
-    background-color: #9C744B; /* Tono marrón */
+    background-color: #f1ac13; /* Tono marrón */
     color: white;
     border: none;
     border-radius: 20px;

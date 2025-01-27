@@ -6,7 +6,7 @@
     display: inline-block; /* Asegura que el botón se comporte como elemento en línea */
     height: 50px;
     width: 200px;
-    background-color: #0778a6;
+    background-color: #f1ac13;
     color: white;
     border: none;
     border-radius: 5px;
@@ -17,7 +17,7 @@
     display: inline-block; /* Asegura que el botón se comporte como elemento en línea */
     height: 50px;
     width: 200px;
-    background-color: #0778a6;
+    background-color: #f1ac13;
     color: white;
     border: none;
     border-radius: 5px;
@@ -43,12 +43,12 @@
 
   /* Cambiar color al pasar el cursor */
   .btn-confirm:hover {
-    background-color: #45bfef; /* Verde oscuro */
+    background-color: #efbc50; /* Verde oscuro */
 }
 
 /* Botón de Confirmación (Iniciar Sesión) */
 .btn-confirm {
-    background-color: #0778a6;  /* Aquí el punto y coma es innecesario */
+    background-color: #f1ac13;  /* Aquí el punto y coma es innecesario */
     width: 360px;
     font-family: 'Arial', sans-serif;
     font-size: 16px;

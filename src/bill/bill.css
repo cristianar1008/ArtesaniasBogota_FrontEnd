@@ -105,7 +105,7 @@
 
 .pay-button {
     padding: 10px;
-    background-color: #0778a6;
+    background-color: #f1ac13;
     color: white;
     font-size: 16px;
     border: none;
@@ -115,7 +115,7 @@
 }
 
 .pay-button:hover {
-    background-color: #45bfef;
+    background-color: #efbc50;
 }
 
 /* Pie de página */
@@ -123,7 +123,7 @@
     margin-top: auto; /* Mantiene el footer al final del contenedor */
     padding: 10px 0; /* Espaciado interno para mayor legibilidad */
     text-align: center;
-    background-color: #9C744B;
+    background-color: #8B0000;
     color: #555;
     font-size: 0.9rem;
     border-top: 1px solid #ddd;

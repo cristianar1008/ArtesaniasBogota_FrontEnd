@@ -116,7 +116,7 @@
 
 /* Botón de Confirmación (Iniciar Sesión) */
 .btn-confirm {
-    background-color: #0778a6;
+    background-color: #f1ac13;
     ; 
     width: 360px;
     font-family: 'Arial', sans-serif;
@@ -125,7 +125,7 @@
   
   /* Cambiar color al pasar el cursor */
   .btn-confirm:hover {
-    background-color: #45bfef; /* Verde oscuro */
+    background-color: #efbc50; /* Verde oscuro */
   }
 
 .forgot-password {
@@ -194,7 +194,7 @@
 /* Estilos para el botón "Ir a pagar" */
 .pay-button {
     padding: 10px;
-    background-color: #0778a6;
+    background-color: #f1ac13;
     color: white;
     font-size: 16px;
     border: none;
@@ -203,7 +203,7 @@
 }
 
 .pay-button:hover {
-    background-color: #45bfef;
+    background-color: #efbc50;
 }
 
 /* Estilos para el botón "Seguir comprando" */

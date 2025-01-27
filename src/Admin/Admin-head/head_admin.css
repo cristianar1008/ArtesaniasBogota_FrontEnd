@@ -1,5 +1,5 @@
 .navbar {
-    background-color: #9C744B; /* Tono marrón */
+    background-color: #8B0000;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -42,7 +42,7 @@
   
   
   .separator {
-    background-color: #9C744B;
+    background-color: #8B0000;
     display: block;
     height: 20px;
     margin-top: 10px;
