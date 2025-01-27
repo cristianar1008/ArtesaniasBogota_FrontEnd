@@ -11,8 +11,12 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      // Configuración opcional para alias
       '@': '/src',
     },
   },
+  server: {
+    host: '0.0.0.0',  // Permitir conexiones externas
+    port: process.env.PORT || 4173,  // Usar el puerto proporcionado por Render o el predeterminado
+  },
 });
+
