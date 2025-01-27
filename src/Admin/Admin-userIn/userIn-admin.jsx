@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faWarehouse, faUserTie, faUser, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
-import './userIn-Admin.css';
+import './userIn-admin.css';
 
 
 function UserIn_Admin() {
