@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faWarehouse, faUserTie, faUser, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import Swal from 'sweetalert2';
 import './userIn-admin.css';
 
 
@@ -10,6 +11,65 @@ function UserIn_Admin() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+
+  const showUpdatePss = async () => {
+    Swal.fire({
+        title: 'Actualizar Contraseña',
+        html: `
+            <input type="password" id="Old_password" class="swal2-input" placeholder="Anterior contraseña" required />
+            <input type="password" id="New_password" class="swal2-input" placeholder="Nueva Contraseña" required />
+            <input type="password" id="Confirm_Password" class="swal2-input" placeholder="Confirmar Contraseña" required />
+        `,
+        showCloseButton: true,
+        showCancelButton: false,
+        confirmButtonText: 'Actualizar',
+        customClass: {
+            confirmButton: 'btn-confirm',
+            title: 'swal-title'
+        },
+        preConfirm: () => {
+            const oldPassword = Swal.getPopup().querySelector('#Old_password').value;
+            const newPassword = Swal.getPopup().querySelector('#New_password').value;
+            const confirmPassword = Swal.getPopup().querySelector('#Confirm_Password').value;
+
+            // Validación de campos vacíos
+            if (!oldPassword || !newPassword || !confirmPassword) {
+                Swal.showValidationMessage('Por favor, completa todos los campos.');
+                return false;
+            }
+
+            // Validación de la nueva contraseña
+            if (!validatePassword(newPassword)) {
+                Swal.showValidationMessage('La nueva contraseña debe tener al menos 8 caracteres, incluir al menos una letra mayúscula, un número y un carácter especial.');
+                return false;
+            }
+
+            // Verificación de coincidencia de contraseñas
+            if (newPassword !== confirmPassword) {
+                Swal.showValidationMessage('Las contraseñas no coinciden.');
+                return false;
+            }
+
+            return { oldPassword, newPassword };
+        },
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            const { oldPassword, newPassword } = result.value;
+
+            try {
+                const response = await updatePassword(oldPassword, newPassword);
+                
+                if (response.success) {
+                    Swal.fire('Éxito', 'Tu contraseña ha sido actualizada correctamente.', 'success');
+                } else {
+                    Swal.fire('Error', response.message || 'Hubo un problema al actualizar la contraseña.', 'error');
+                }
+            } catch (error) {
+                Swal.fire('Error', 'No se pudo actualizar la contraseña. Intenta de nuevo más tarde.', 'error');
+            }
+        }
+    });
+};
 
   
   
@@ -82,7 +142,7 @@ function UserIn_Admin() {
       {isMenuOpen && (
         <div className="dropdown-menu-user-In">
           <div className="menu-item-user-In">Mi perfil</div>
-          <div className="menu-item-user-In">Actualizar contraseña</div>
+          <div className="menu-item-user-In" onClick={showUpdatePss}>Actualizar contraseña</div>
           <div className="menu-item-user-In" onClick={deleteAllCookiesAndRedirect}>Cerrar sesión</div>
         </div>
       )}
