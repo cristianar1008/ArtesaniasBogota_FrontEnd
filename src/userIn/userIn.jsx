@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faWarehouse, faUserTie, faUser, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faWarehouse, faUserTie, faUser, faShoppingCart, faFileAlt, faClipboardList } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
 import './userIn.css';
 
@@ -597,31 +597,39 @@ const validatePassword = (password) => {
   
   return (
     <div className="user-in-container-user-In">
-      
-      
-      {isCookieEmptyOrMissing("documento") ? (
-  // Si la cookie está vacía o no existe
-  <div className="icon-wrapper-user-In" onClick={toggleMenu}>
-    <FontAwesomeIcon icon={faUser} className="icon-spacing-user-In" />
-    <span className="icon-label">Mi cuenta</span>
-    {isMenuOpen && (
-      <div className="dropdown-menu-user-In">
-        <div className="menu-item-user-In" onClick={showLoginModal}>Iniciar sesión</div>
-        <div className="menu-item-user-In" onClick={showRegisterModal}>Registrarse</div>
-      </div>
-    )}
+    {isCookieEmptyOrMissing("documento") ? (
+      // Si la cookie está vacía o no existe
+      <div className="icon-wrapper-user-In" onClick={toggleMenu}>
+        <FontAwesomeIcon icon={faUser} className="icon-spacing-user-In" />
+        <span className="icon-label">Mi cuenta</span>
+        {isMenuOpen && (
+          <div className="dropdown-menu-user-In">
+            <div className="menu-item-user-In" onClick={showLoginModal}>Iniciar sesión</div>
+            <div className="menu-item-user-In" onClick={showRegisterModal}>Registrarse</div>
+          </div>
+        )}
       </div>
     ) : (
       // Si la cookie tiene algún valor
       <>
-      <div className="icon-wrapper-user-In">
-            <FontAwesomeIcon icon={faWarehouse} onClick={showStock} className="icon-spacing-user-In" />
-            <span className="icon-label">Inventario</span>
-          </div>
+        <div className="icon-wrapper-user-In">
+          <FontAwesomeIcon icon={faWarehouse} onClick={showStock} className="icon-spacing-user-In" />
+          <span className="icon-label">Inventario</span>
+        </div>
 
-        <div className="icon-wrapper-user-In" >
+        <div className="icon-wrapper-user-In">
           <FontAwesomeIcon icon={faUserTie} className="icon-spacing-user-In" />
           <span className="icon-label" onClick={redirectToUserAdmin}>Usuarios</span>
+        </div>
+
+        <div className="icon-wrapper-user-In">
+          <FontAwesomeIcon icon={faFileAlt} className="icon-spacing-user-In"  />
+          <span className="icon-label">Reportes</span>
+        </div>
+
+        <div className="icon-wrapper-user-In">
+          <FontAwesomeIcon icon={faClipboardList} className="icon-spacing-user-In"  />
+          <span className="icon-label">Pedidos</span>
         </div>
 
         <div className="icon-wrapper-user-In" onClick={toggleMenu}>
@@ -635,50 +643,34 @@ const validatePassword = (password) => {
             </div>
           )}
         </div>
-
-        
       </>
     )}
-        
-        
 
-  
+    <div className="icon-wrapper-user-In" onClick={toggleCart}>
+      <FontAwesomeIcon icon={faShoppingCart} className="icon-spacing-user-In" />
+      <span className="icon-label">Mi carrito</span>
+    </div>
 
-      <div className="icon-wrapper-user-In" onClick={toggleCart}>
-        <FontAwesomeIcon icon={faShoppingCart} className="icon-spacing-user-In" />
-        <span className="icon-label">Mi carrito</span>
-      </div>
+    <div className="icon-wrapper-user-In">
+      <FontAwesomeIcon icon={faHome} className="icon-spacing-user-In" onClick={() => window.location.href = '/'} />
+      <span className="icon-label">Inicio</span>
+    </div>
 
-      <div className="icon-wrapper-user-In">
-              <FontAwesomeIcon icon={faHome} className="icon-spacing-user-In" onClick={() => window.location.href = '/'} />
-              <span className="icon-label">Inicio</span>
-        </div>
-
-
-       {/* Barra lateral del carrito */}
-       <div className={`sidebar-cart ${isCartOpen ? 'active' : ''}`}>
-        <center><h3>Comprar</h3></center>
-        {/* <div class="cart-item">
-          <img src="https://vpinteriorismo.com/8107-large_default/pieza-decorativa-etnica-metal-marmol-n1.jpg" alt="Producto X" class="cart-item-image" />
-          <div class="cart-item-details">
-            <h4 class="cart-item-name">Producto X</h4>
-            <p class="cart-item-price">$120,000</p>
-          </div>
-        </div> */}
-        <CardShop
-          carrito={carrito}
-          onUpdateQuantity={handleUpdateQuantity}
-          onRemoveItem={handleRemoveItem}
-        />
-
-
-        <div className="cart-buttons">
-          <button className="pay-button" onClick={handleBill}>Ir a pagar</button>
-          <button className="continue-button" onClick={closeCart}>Seguir comprando</button>
-        </div>
+    {/* Barra lateral del carrito */}
+    <div className={`sidebar-cart ${isCartOpen ? 'active' : ''}`}>
+      <center><h3>Comprar</h3></center>
+      <CardShop
+        carrito={carrito}
+        onUpdateQuantity={handleUpdateQuantity}
+        onRemoveItem={handleRemoveItem}
+      />
+      <div className="cart-buttons">
+        <button className="pay-button" onClick={handleBill}>Ir a pagar</button>
+        <button className="continue-button" onClick={closeCart}>Seguir comprando</button>
       </div>
     </div>
-  );
+  </div>
+);
 }
 
 export default UserIn;

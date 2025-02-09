@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 function AdminUserIndex() {
   
   const apiUrl_artesanias = import.meta.env.VITE_APP_API_URL_ARTESANIAS;
+  const apiUrl_login = import.meta.env.VITE_APP_API_URL_LOGIN;
 
   const [selectedUser, setSelectedUser] = useState(null); // Usuario seleccionado
 

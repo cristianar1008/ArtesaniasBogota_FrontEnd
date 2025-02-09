@@ -7,7 +7,7 @@ import axios from 'axios';
 const AdminUserDataTable = ({ onUserSelect }) => {
 
   const apiUrl_artesanias = import.meta.env.VITE_APP_API_URL_ARTESANIAS;
-
+  const apiUrl_login = import.meta.env.VITE_APP_API_URL_LOGIN;
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filterText, setFilterText] = useState('');
@@ -26,7 +26,7 @@ const AdminUserDataTable = ({ onUserSelect }) => {
   useEffect(() => {
     const token = getCookie('token'); // Obtén el token desde las cookies
     console.log(token)
-    fetch(`${apiUrl_artesanias}/api/usuarios/list`, {
+    fetch(`${apiUrl_login}/api/usuarios/list`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`, // Incluye el token en los headers
