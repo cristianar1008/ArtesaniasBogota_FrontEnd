@@ -11,6 +11,16 @@ function UserIn_Admin() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const apiUrl_artesanias = import.meta.env.VITE_APP_API_URL_ARTESANIAS;
+
+  const getCookie = (name) => {
+    const cookies = document.cookie.split("; ").reduce((acc, current) => {
+      const [key, value] = current.split("=");
+      acc[key] = decodeURIComponent(value);
+      return acc;
+    }, {});
+    return cookies[name] || null;
+  };
 
   const showUpdatePss = async () => {
     Swal.fire({
@@ -32,19 +42,16 @@ function UserIn_Admin() {
             const newPassword = Swal.getPopup().querySelector('#New_password').value;
             const confirmPassword = Swal.getPopup().querySelector('#Confirm_Password').value;
 
-            // Validación de campos vacíos
             if (!oldPassword || !newPassword || !confirmPassword) {
                 Swal.showValidationMessage('Por favor, completa todos los campos.');
                 return false;
             }
 
-            // Validación de la nueva contraseña
             if (!validatePassword(newPassword)) {
                 Swal.showValidationMessage('La nueva contraseña debe tener al menos 8 caracteres, incluir al menos una letra mayúscula, un número y un carácter especial.');
                 return false;
             }
 
-            // Verificación de coincidencia de contraseñas
             if (newPassword !== confirmPassword) {
                 Swal.showValidationMessage('Las contraseñas no coinciden.');
                 return false;
@@ -55,14 +62,27 @@ function UserIn_Admin() {
     }).then(async (result) => {
         if (result.isConfirmed) {
             const { oldPassword, newPassword } = result.value;
+            const userId = 1001402110; // ID de usuario
+            const url = `${apiUrl_artesanias}}/api/usuarios/change_password/${getCookie("documento")}`;
 
             try {
-                const response = await updatePassword(oldPassword, newPassword);
+                const response = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        password: oldPassword,
+                        newPassword: newPassword
+                    })
+                });
                 
-                if (response.success) {
+                const data = await response.json();
+
+                if (response.ok) {
                     Swal.fire('Éxito', 'Tu contraseña ha sido actualizada correctamente.', 'success');
                 } else {
-                    Swal.fire('Error', response.message || 'Hubo un problema al actualizar la contraseña.', 'error');
+                    Swal.fire('Error', data.message || 'Hubo un problema al actualizar la contraseña.', 'error');
                 }
             } catch (error) {
                 Swal.fire('Error', 'No se pudo actualizar la contraseña. Intenta de nuevo más tarde.', 'error');

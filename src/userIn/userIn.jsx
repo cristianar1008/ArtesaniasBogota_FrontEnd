@@ -17,64 +17,77 @@ function UserIn({ carrito, handleUpdateQuantity, handleRemoveItem }) {
   const apiUrl_artesanias = import.meta.env.VITE_APP_API_URL_ARTESANIAS;
   const apiUrl_login = import.meta.env.VITE_APP_API_URL_LOGIN;
 
+  
+
   const showUpdatePss = async () => {
-    Swal.fire({
-        title: 'Actualizar Contraseña',
-        html: `
-            <input type="password" id="Old_password" class="swal2-input" placeholder="Anterior contraseña" required />
-            <input type="password" id="New_password" class="swal2-input" placeholder="Nueva Contraseña" required />
-            <input type="password" id="Confirm_Password" class="swal2-input" placeholder="Confirmar Contraseña" required />
-        `,
-        showCloseButton: true,
-        showCancelButton: false,
-        confirmButtonText: 'Actualizar',
-        customClass: {
-            confirmButton: 'btn-confirm',
-            title: 'swal-title'
-        },
-        preConfirm: () => {
-            const oldPassword = Swal.getPopup().querySelector('#Old_password').value;
-            const newPassword = Swal.getPopup().querySelector('#New_password').value;
-            const confirmPassword = Swal.getPopup().querySelector('#Confirm_Password').value;
-
-            // Validación de campos vacíos
-            if (!oldPassword || !newPassword || !confirmPassword) {
-                Swal.showValidationMessage('Por favor, completa todos los campos.');
-                return false;
-            }
-
-            // Validación de la nueva contraseña
-            if (!validatePassword(newPassword)) {
-                Swal.showValidationMessage('La nueva contraseña debe tener al menos 8 caracteres, incluir al menos una letra mayúscula, un número y un carácter especial.');
-                return false;
-            }
-
-            // Verificación de coincidencia de contraseñas
-            if (newPassword !== confirmPassword) {
-                Swal.showValidationMessage('Las contraseñas no coinciden.');
-                return false;
-            }
-
-            return { oldPassword, newPassword };
-        },
-    }).then(async (result) => {
-        if (result.isConfirmed) {
-            const { oldPassword, newPassword } = result.value;
-
-            try {
-                const response = await updatePassword(oldPassword, newPassword);
-                
-                if (response.success) {
-                    Swal.fire('Éxito', 'Tu contraseña ha sido actualizada correctamente.', 'success');
-                } else {
-                    Swal.fire('Error', response.message || 'Hubo un problema al actualizar la contraseña.', 'error');
-                }
-            } catch (error) {
-                Swal.fire('Error', 'No se pudo actualizar la contraseña. Intenta de nuevo más tarde.', 'error');
-            }
-        }
-    });
-};
+      Swal.fire({
+          title: 'Actualizar Contraseña',
+          html: `
+              <input type="password" id="Old_password" class="swal2-input" placeholder="Anterior contraseña" required />
+              <input type="password" id="New_password" class="swal2-input" placeholder="Nueva Contraseña" required />
+              <input type="password" id="Confirm_Password" class="swal2-input" placeholder="Confirmar Contraseña" required />
+          `,
+          showCloseButton: true,
+          showCancelButton: false,
+          confirmButtonText: 'Actualizar',
+          customClass: {
+              confirmButton: 'btn-confirm',
+              title: 'swal-title'
+          },
+          preConfirm: () => {
+              const oldPassword = Swal.getPopup().querySelector('#Old_password').value;
+              const newPassword = Swal.getPopup().querySelector('#New_password').value;
+              const confirmPassword = Swal.getPopup().querySelector('#Confirm_Password').value;
+  
+              if (!oldPassword || !newPassword || !confirmPassword) {
+                  Swal.showValidationMessage('Por favor, completa todos los campos.');
+                  return false;
+              }
+  
+              if (!validatePassword(newPassword)) {
+                  Swal.showValidationMessage('La nueva contraseña debe tener al menos 8 caracteres, incluir al menos una letra mayúscula, un número y un carácter especial.');
+                  return false;
+              }
+  
+              if (newPassword !== confirmPassword) {
+                  Swal.showValidationMessage('Las contraseñas no coinciden.');
+                  return false;
+              }
+  
+              return { oldPassword, newPassword };
+          },
+      }).then(async (result) => {
+          if (result.isConfirmed) {
+              const { oldPassword, newPassword } = result.value;
+              const userId = 1001402110; // ID de usuario
+              const cookies = getCookies();
+              const url = `${apiUrl_artesanias}}/api/usuarios/change_password/${cookies["documento"]}`;
+  
+              try {
+                  const response = await fetch(url, {
+                      method: 'PUT',
+                      headers: {
+                          'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({
+                          password: oldPassword,
+                          newPassword: newPassword
+                      })
+                  });
+                  
+                  const data = await response.json();
+  
+                  if (response.ok) {
+                      Swal.fire('Éxito', 'Tu contraseña ha sido actualizada correctamente.', 'success');
+                  } else {
+                      Swal.fire('Error', data.message || 'Hubo un problema al actualizar la contraseña.', 'error');
+                  }
+              } catch (error) {
+                  Swal.fire('Error', 'No se pudo actualizar la contraseña. Intenta de nuevo más tarde.', 'error');
+              }
+          }
+      });
+  };
 
 
   
@@ -140,6 +153,7 @@ function UserIn({ carrito, handleUpdateQuantity, handleRemoveItem }) {
   const showRegisterModal = async () => {
     Swal.fire({
         title: 'Formulario de Registro',
+        width: 700, // Ajuste del ancho
         html: `
             <input type="text" id="documento" class="swal2-input" placeholder="Número de documento de identidad" required />
             <input type="text" id="primerNombre" class="swal2-input" placeholder="Primer nombre" required />
@@ -147,19 +161,71 @@ function UserIn({ carrito, handleUpdateQuantity, handleRemoveItem }) {
             <input type="text" id="primerApellido" class="swal2-input" placeholder="Primer apellido" required />
             <input type="text" id="segundoApellido" class="swal2-input" placeholder="Segundo apellido" required />
             <input type="tel" id="telefono" class="swal2-input" placeholder="Número de teléfono" required />
-            <input type="text" id="direccion" class="swal2-input" placeholder="Dirección de residencia" required />
-            <input type="email" id="email" class="swal2-input" placeholder="Correo electrónico" required />
+            <label style="font-size: 15px; color: black;">Dirección</label><br />
+            <div class="direccion-container">
+              <!-- Primera Fila -->
+              <div class="direccion-row">
+                  <select id="tipoVia" class="direccion-select">
+                      <option value="Calle">Calle</option>
+                      <option value="Carrera" selected>Carrera</option>
+                      <option value="Avenida">Avenida</option>
+                      <option value="Transversal">Transversal</option>
+                  </select>
+
+                  <input type="text" id="direccion1" class="direccion-input" placeholder="Ej: 10A" />
+
+                  <select id="letra1" class="direccion-select">
+                      <option value=""></option>
+                      <option value="A">A</option>
+                      <option value="B" selected>B</option>
+                      <option value="C">C</option>
+                  </select>
+
+                  <select id="cardinal1" class="direccion-select">
+                      <option value=""></option>
+                      <option value="NORTE">NORTE</option>
+                      <option value="SUR">SUR</option>
+                      <option value="ESTE" selected>ESTE</option>
+                      <option value="OESTE">OESTE</option>
+                  </select>
+              </div>
+
+              <!-- Segunda Fila -->
+              <div class="direccion-row">
+                  <label class="direccion-label">#</label>
+
+                  <input type="text" id="direccion2" class="direccion-input" placeholder="Ej: 20B" />
+
+                  <select id="letra2" class="direccion-select">
+                      <option value=""></option>
+                      <option value="A">A</option>
+                      <option value="B">B</option>
+                      <option value="C" selected>C</option>
+                  </select>
+
+                  <input type="text" id="direccion3" class="direccion-input" placeholder="Ej: 30" />
+
+                  <select id="cardinal2" class="direccion-select">
+                      <option value=""></option>
+                      <option value="NORTE">NORTE</option>
+                      <option value="SUR" selected>SUR</option>
+                      <option value="ESTE">ESTE</option>
+                      <option value="OESTE">OESTE</option>
+                  </select>
+              </div>
+          </div>
+            <input type="email" id="email" class="swal2-input" placeholder="Correo electrónico" required /><br/>
             <label style="font-size: 15px; color: black;">Fecha de nacimiento</label><br />
             <input type="date" id="fechaNacimiento" class="swal2-input" required />
             <input type="password" id="password" class="swal2-input" placeholder="Contraseña" required />
             <input type="password" id="confirmPassword" class="swal2-input" placeholder="Confirmar Contraseña" required />
         `,
         showCloseButton: true,
-        showCancelButton: false,
         confirmButtonText: 'Registrarse',
         customClass: {
             confirmButton: 'btn-confirm',
-            title: 'swal-title'
+            title: 'swal-title',
+            popup: 'custom-width' // Aplica el ancho personalizado
         },
         preConfirm: () => {
             const documento = Swal.getPopup().querySelector('#documento').value;
@@ -168,31 +234,36 @@ function UserIn({ carrito, handleUpdateQuantity, handleRemoveItem }) {
             const primerApellido = Swal.getPopup().querySelector('#primerApellido').value;
             const segundoApellido = Swal.getPopup().querySelector('#segundoApellido').value;
             const telefono = Swal.getPopup().querySelector('#telefono').value;
-            const direccion = Swal.getPopup().querySelector('#direccion').value;
+            const tipoVia = Swal.getPopup().querySelector('#tipoVia').value;
+            const direccion1 = Swal.getPopup().querySelector('#direccion1').value;
+            const letra1 = Swal.getPopup().querySelector('#letra1').value;
+            const cardinal1 = Swal.getPopup().querySelector('#cardinal1').value;
+            const direccion2 = Swal.getPopup().querySelector('#direccion2').value;
+            const letra2 = Swal.getPopup().querySelector('#letra2').value;
+            const direccion3 = Swal.getPopup().querySelector('#direccion3').value;
+            const cardinal2 = Swal.getPopup().querySelector('#cardinal2').value;
             const email = Swal.getPopup().querySelector('#email').value;
             const fechaNacimiento = Swal.getPopup().querySelector('#fechaNacimiento').value;
             const password = Swal.getPopup().querySelector('#password').value;
             const confirmPassword = Swal.getPopup().querySelector('#confirmPassword').value;
 
-            // Validación de los campos requeridos
-            if (!documento || !primerNombre || !primerApellido || !telefono || !direccion || !email || !fechaNacimiento || !password || !confirmPassword) {
+            if (!documento || !primerNombre || !primerApellido || !telefono || !direccion1 || !direccion2 || !direccion3 || !email || !fechaNacimiento || !password || !confirmPassword) {
                 Swal.showValidationMessage('Por favor, completa todos los campos requeridos');
                 return false;
             }
 
-            // Validación de contraseña
             if (!validatePassword(password)) {
                 Swal.showValidationMessage('La contraseña debe tener al menos 8 caracteres, incluir al menos una letra mayúscula, un número y un carácter especial.');
                 return false;
             }
 
-            // Verificar si las contraseñas coinciden
             if (password !== confirmPassword) {
                 Swal.showValidationMessage('Las contraseñas no coinciden.');
                 return false;
             }
 
-            // Retornamos los valores del formulario
+            const direccionCompleta = `${tipoVia} ${direccion1} ${letra1} ${cardinal1} # ${direccion2} ${letra2} - ${direccion3} ${cardinal2}`.replace(/\s+/g, ' ').trim();
+
             return {
                 documento,
                 primerNombre,
@@ -200,7 +271,7 @@ function UserIn({ carrito, handleUpdateQuantity, handleRemoveItem }) {
                 primerApellido,
                 segundoApellido,
                 telefono,
-                direccion,
+                direccion: direccionCompleta,
                 email,
                 fechaNacimiento,
                 password
@@ -231,22 +302,14 @@ function UserIn({ carrito, handleUpdateQuantity, handleRemoveItem }) {
             setEmail(email);
             setFechaNacimiento(fechaNacimiento);
             setPassword(password);
-            let code = await sendEmail(email)
-        
-            showValidateModal(code, documento,
-                fechaNacimiento,
-                telefono,
-                primerNombre,
-                segundoNombre,
-                primerApellido,
-                segundoApellido,
-                direccion,
-                password,
-                email)
-            
+            let code = await sendEmail(email);
+
+            showValidateModal(code, documento, fechaNacimiento, telefono, primerNombre, segundoNombre, primerApellido, segundoApellido, direccion, password, email);
         }
     });
 };
+
+
 
 const showValidateModal = (code,  
   documento,

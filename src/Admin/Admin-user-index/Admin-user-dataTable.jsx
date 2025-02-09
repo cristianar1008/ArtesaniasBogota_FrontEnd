@@ -13,26 +13,49 @@ const AdminUserDataTable = ({ onUserSelect }) => {
   const [filterText, setFilterText] = useState('');
   const [selectedUserId, setSelectedUserId] = useState(null);
 
-  // Obtener lista de usuarios
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) {
+      return parts.pop().split(';').shift();
+    }
+    return null; // Devuelve null si la cookie no existe
+  }
+  
+
   useEffect(() => {
-    axios.get(`${apiUrl_artesanias}/api/usuarios/list`)
+    const token = getCookie('token'); // Obtén el token desde las cookies
+    console.log(token)
+    fetch(`${apiUrl_artesanias}/api/usuarios/list`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`, // Incluye el token en los headers
+        'Content-Type': 'application/json', // Indica que se espera JSON
+      },
+    })
       .then((response) => {
-        const formattedData = response.data.map((user) => ({
+        if (!response.ok) {
+          throw new Error(`Error HTTP: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const formattedData = data.map((user) => ({
           ...user,
           fecha_nacimiento: user.fecha_nacimiento
             ? new Date(user.fecha_nacimiento).toISOString().split('T')[0]
             : '',
-          activo: true, // Todos los usuarios se activan por defecto
+          activo: true,
         }));
         setRows(formattedData);
         setLoading(false);
       })
       .catch((error) => {
-        console.error('Error al obtener los datos de usuarios', error);
+        console.error('Error al obtener los datos de usuarios:', error);
         setLoading(false);
       });
   }, []);
-
+  
   // Filtrar los datos de los usuarios
   const filteredRows = rows.filter((row) =>
     Object.values(row).some((value) =>
