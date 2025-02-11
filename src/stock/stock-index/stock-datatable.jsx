@@ -249,7 +249,7 @@ const ProductDataTable = ({ onProductSelect }) => {
           onClick={showProductModal}
           disabled={!selectedProductId}
         >
-          Modificar Producto
+          Modificar 
         </Button>
       </Box>
 
