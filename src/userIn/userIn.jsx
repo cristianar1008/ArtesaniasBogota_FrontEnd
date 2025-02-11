@@ -61,7 +61,7 @@ function UserIn({ carrito, handleUpdateQuantity, handleRemoveItem }) {
               const { oldPassword, newPassword } = result.value;
               const userId = 1001402110; // ID de usuario
               const cookies = getCookies();
-              const url = `${apiUrl_artesanias}}/api/usuarios/change_password/${cookies["documento"]}`;
+              const url = `${apiUrl_login}}/api/usuarios/change_password/${cookies["documento"]}`;
   
               try {
                   const response = await fetch(url, {
@@ -456,7 +456,7 @@ const validatePassword = (password) => {
 
   const sendEmail = async (e) => {
     try {
-        const response = await fetch(`${apiUrl_artesanias}/api/email_auth`, {
+        const response = await fetch(`${apiUrl_login}/api/email_auth`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -505,7 +505,7 @@ const validatePassword = (password) => {
     };
     console.log(options)
   
-    fetch(`${apiUrl_artesanias}/api/usuarios/create/cliente`, options)
+    fetch(`${apiUrl_login}/api/usuarios/create/cliente`, options)
       .then((response) => {
         console.log(response)
         if (response.ok == false) {
@@ -594,6 +594,13 @@ const validatePassword = (password) => {
   const showStock = () =>{
     window.location.href = '/stock';
   }
+
+  const showOrder = () =>{
+    window.location.href = '/order';
+  }
+  const showReport = () =>{
+    window.location.href = '/report';
+  }
   
   return (
     <div className="user-in-container-user-In">
@@ -623,12 +630,12 @@ const validatePassword = (password) => {
         </div>
 
         <div className="icon-wrapper-user-In">
-          <FontAwesomeIcon icon={faFileAlt} className="icon-spacing-user-In"  />
+          <FontAwesomeIcon icon={faFileAlt} className="icon-spacing-user-In" onClick={showReport} />
           <span className="icon-label">Reportes</span>
         </div>
 
         <div className="icon-wrapper-user-In">
-          <FontAwesomeIcon icon={faClipboardList} className="icon-spacing-user-In"  />
+          <FontAwesomeIcon icon={faClipboardList} className="icon-spacing-user-In" onClick={showOrder}  />
           <span className="icon-label">Pedidos</span>
         </div>
 

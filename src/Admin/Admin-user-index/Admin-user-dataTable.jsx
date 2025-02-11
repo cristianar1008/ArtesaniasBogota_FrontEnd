@@ -27,11 +27,13 @@ const AdminUserDataTable = ({ onUserSelect }) => {
     const token = getCookie('token'); // Obtén el token desde las cookies
     console.log(token)
     fetch(`${apiUrl_login}/api/usuarios/list`, {
-      method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`, // Incluye el token en los headers
         'Content-Type': 'application/json', // Indica que se espera JSON
       },
+      method: 'GET',
+      
+      
     })
       .then((response) => {
         if (!response.ok) {

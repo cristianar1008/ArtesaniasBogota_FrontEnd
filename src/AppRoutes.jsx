@@ -7,6 +7,8 @@ import Home from './home/home';
 import Bill from './bill/bill';
 import Redirect from './bill/redirect';
 import Stock from './stock/stock';
+import Order from './order/order';
+import Report from './report/report';
 
 
 const AppRoutes = () => {
@@ -19,6 +21,8 @@ const AppRoutes = () => {
                 <Route path="/bill" element={<Bill />} />
                 <Route path="/pago/redirect" element={<Redirect />} />
                 <Route path="/stock" element={<Stock />} />
+                <Route path="/order" element={<Order />} />
+                <Route path="/report" element={<Report />} />
             </Routes>
         </Router>
     );

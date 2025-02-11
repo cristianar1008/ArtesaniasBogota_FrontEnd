@@ -70,7 +70,7 @@ const ProductDataTable = ({ onProductSelect }) => {
           style="width: 75%; height: 100px;"
         >${selectedProduct?.descripcion || ''}</textarea>
         <input type="number" id="precioUnitario" class="swal2-input" placeholder="Precio unitario" value="${selectedProduct?.precioUnitario.replace('$', '').replace(',', '') || ''}" required />
-        <input type="number" id="calificacion" class="swal2-input" placeholder="Calificación" value="${selectedProduct?.calificacion || ''}" required />
+        <input type="number" id="calificacion" class="swal2-input" placeholder="Cantidad" value="${selectedProduct?.calificacion || ''}" required />
       `,
       showCloseButton: true,
       showCancelButton: true,
@@ -128,7 +128,7 @@ const ProductDataTable = ({ onProductSelect }) => {
       if (result.isConfirmed) {
         axios
           .put(
-            'http://localhost:8081/api/inventario/actualizar-inventario/producto-puntoventa',
+            `${apiUrl_artesanias}/api/inventario/actualizar-inventario/producto-puntoventa`,
             productData // Cuerpo de la solicitud con los datos del producto
           )
           .then(() => {
@@ -162,7 +162,7 @@ const ProductDataTable = ({ onProductSelect }) => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:8081/api/facturas/remove-item/${facturaId}/${itemId}`)
+          .delete(`${apiUrl_artesanias}/api/facturas/remove-item/${facturaId}/${itemId}`)
           .then(() => {
             // Actualiza los datos del DataGrid después de eliminar
             setRows((prevRows) => prevRows.filter((row) => row.id !== itemId));

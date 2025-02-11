@@ -137,7 +137,9 @@ function AdminUserIndex() {
         >
           Modificar usuario
         </button>
+        <div className='space-table'>
         <AdminUserDataTable onUserSelect={setSelectedUser} />
+        </div>
       </div>
     </div>
   );

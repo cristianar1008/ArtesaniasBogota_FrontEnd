@@ -1,6 +1,7 @@
 import Swal from 'sweetalert2';
 import { useState } from 'react';
 import ProductDataTable from './stock-datatable';
+import Footer from '../../footer/footer';
 
 function StockIndex() {
   const [selectedProduct, setSelectedProduct] = useState(null); // Producto seleccionado
@@ -9,32 +10,31 @@ function StockIndex() {
 
   // Mostrar modal para registrar producto
   const showProductModal = () => {
-    const selectedProduct = rows.find((row) => row.id === selectedProductId);
-    if (!selectedProduct) {
-      Swal.fire('Error', 'No hay un producto seleccionado', 'error');
-      return;
-    }
+   
   
     Swal.fire({
-      title: 'Modificar producto',
+      title: 'Registrar producto',
       html: `
-        <input type="text" id="id" class="swal2-input" placeholder="ID del producto" value="${selectedProduct?.id || ''}" readonly />
-        <input type="text" id="nombre" class="swal2-input" placeholder="Nombre del producto" value="${selectedProduct?.nombre || ''}" required />
+        <input type="text" id="nombre" class="swal2-input" placeholder="Nombre del producto"/>
         <textarea 
           id="descripcion" 
           class="swal2-input" 
           placeholder="Descripción del producto" 
           required 
           style="width: 75%; height: 100px;"
-        >${selectedProduct?.descripcion || ''}</textarea>
-        <input type="number" id="precioUnitario" class="swal2-input" placeholder="Precio unitario" value="${selectedProduct?.precioUnitario.replace('$', '').replace(',', '') || ''}" required />
-        <input type="number" id="calificacion" class="swal2-input" placeholder="Calificación" value="${selectedProduct?.calificacion || ''}" required />
+        ></textarea>
+        <input type="number" id="precioUnitario" class="swal2-input" placeholder="Precio unitario"/>
+        <input type="number" id="calificacion" class="swal2-input" placeholder="Calificación"  />
       `,
       showCloseButton: true,
-      showCancelButton: true,
-      confirmButtonText: 'Modificar',
+      showCancelButton: false,
+      confirmButtonText: 'Registrar',
+      customClass: {
+        title: 'swal-title',
+        confirmButton: 'btn-confirm',
+      },
       preConfirm: () => {
-        const id = Swal.getPopup().querySelector('#id').value;
+       
         const nombre = Swal.getPopup().querySelector('#nombre').value;
         const descripcion = Swal.getPopup().querySelector('#descripcion').value;
         const precioUnitario = parseFloat(Swal.getPopup().querySelector('#precioUnitario').value);
@@ -45,12 +45,12 @@ function StockIndex() {
           return false;
         }
   
-        return { id, nombre, descripcion, precioUnitario, calificacion };
+        return {nombre, descripcion, precioUnitario, calificacion };
       },
     }).then((result) => {
       if (result.isConfirmed) {
         const updatedProduct = result.value;
-        handleUpdate(updatedProduct); // Llama a la función de actualización
+        handleRegister(updatedProduct); // Llama a la función de actualización
       }
     });
   };
@@ -99,11 +99,25 @@ function StockIndex() {
     });
   };
 
+  const getTokenFromCookies = () => {
+    const cookies = document.cookie.split('; ');
+    const tokenCookie = cookies.find((cookie) => cookie.startsWith('token='));
+    return tokenCookie ? tokenCookie.split('=')[1] : null;
+  };
+
   // Registrar producto
   const handleRegister = (productData) => {
+    const token = getTokenFromCookies();
+        if (!token) {
+          setMessage('Error: No se encontró el token de autenticación.');
+          setLoading(false);
+          return;
+        }
+    console.log(productData)
     fetch(`${apiUrl_artesanias}/api/productos/create`, {
       method: 'POST',
       headers: {
+         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(productData),
@@ -153,14 +167,18 @@ function StockIndex() {
           Registrar Producto
         </button>
         
-
+       
         <ProductDataTable 
           onUserSelect={(product) => {
             setSelectedProduct(product);
             showModifyProductModal(product);
           }}
         ></ProductDataTable>
+        
       </div>
+      <footer class="footer-footer">
+        <Footer></Footer>
+    </footer>
     </div>
   );
 }
