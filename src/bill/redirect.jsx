@@ -27,6 +27,7 @@ const Redirect = () => {
   const [carrito, setCarrito] = useState([]);
 
   const apiUrl_artesanias = import.meta.env.VITE_APP_API_URL_ARTESANIAS;
+  const apiUrl_login = import.meta.env.VITE_APP_API_URL_PAGO;
 
   // Cargar datos del usuario y carrito desde las cookies
   useEffect(() => {
@@ -59,10 +60,12 @@ const Redirect = () => {
 
     try {
       // Crear factura
-      const response = await fetch(`${apiUrl_artesanias}/api/facturas/crear`, {
+      const cookies = getCookies();
+      const response = await fetch(`${apiUrl_login}/api/facturas/crear`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${cookies.token}`
         },
         body: JSON.stringify({
           documentoUsuario: documentoUsuario,
@@ -111,11 +114,12 @@ const Redirect = () => {
       }));
       console.log("productosFactura")
       console.log(productosFactura)
-  
-      const response = await fetch(`${apiUrl_artesanias}/api/facturas/agregar-productos`, {
+      const cookies = getCookies();
+      const response = await fetch(`${apiUrl_login}/api/facturas/agregar-productos`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+           Authorization: `Bearer ${cookies.token}`
         },
         body: JSON.stringify(productosFactura),
       });

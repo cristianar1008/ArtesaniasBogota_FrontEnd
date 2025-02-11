@@ -601,11 +601,21 @@ const validatePassword = (password) => {
   const showReport = () =>{
     window.location.href = '/report';
   }
+
+  const getCookie2 = (cookieName) => {
+    const cookies = document.cookie.split("; ").reduce((acc, current) => {
+        const [key, value] = current.split("=");
+        acc[key] = decodeURIComponent(value || ""); 
+        return acc;
+    }, {});
+    return cookies[cookieName] ? JSON.parse(cookies[cookieName]) : [];
+};
+
+const userRoles = getCookie2("roles");
   
-  return (
-    <div className="user-in-container-user-In">
+return (
+  <div className="user-in-container-user-In">
     {isCookieEmptyOrMissing("documento") ? (
-      // Si la cookie está vacía o no existe
       <div className="icon-wrapper-user-In" onClick={toggleMenu}>
         <FontAwesomeIcon icon={faUser} className="icon-spacing-user-In" />
         <span className="icon-label">Mi cuenta</span>
@@ -617,27 +627,35 @@ const validatePassword = (password) => {
         )}
       </div>
     ) : (
-      // Si la cookie tiene algún valor
       <>
-        <div className="icon-wrapper-user-In">
-          <FontAwesomeIcon icon={faWarehouse} onClick={showStock} className="icon-spacing-user-In" />
-          <span className="icon-label">Inventario</span>
-        </div>
+        {/* Opciones según el rol */}
+        {userRoles.includes("Admin") && (
+          <>
+            <div className="icon-wrapper-user-In">
+              <FontAwesomeIcon icon={faWarehouse} onClick={showStock} className="icon-spacing-user-In" />
+              <span className="icon-label">Inventario</span>
+            </div>
+            <div className="icon-wrapper-user-In">
+              <FontAwesomeIcon icon={faUserTie} className="icon-spacing-user-In" />
+              <span className="icon-label" onClick={redirectToUserAdmin}>Usuarios</span>
+            </div>
+            <div className="icon-wrapper-user-In">
+              <FontAwesomeIcon icon={faFileAlt} className="icon-spacing-user-In" onClick={showReport} />
+              <span className="icon-label">Reportes</span>
+            </div>
+            <div className="icon-wrapper-user-In">
+              <FontAwesomeIcon icon={faClipboardList} className="icon-spacing-user-In" onClick={showOrder} />
+              <span className="icon-label">Pedidos</span>
+            </div>
+          </>
+        )}
 
-        <div className="icon-wrapper-user-In">
-          <FontAwesomeIcon icon={faUserTie} className="icon-spacing-user-In" />
-          <span className="icon-label" onClick={redirectToUserAdmin}>Usuarios</span>
-        </div>
-
-        <div className="icon-wrapper-user-In">
-          <FontAwesomeIcon icon={faFileAlt} className="icon-spacing-user-In" onClick={showReport} />
-          <span className="icon-label">Reportes</span>
-        </div>
-
-        <div className="icon-wrapper-user-In">
-          <FontAwesomeIcon icon={faClipboardList} className="icon-spacing-user-In" onClick={showOrder}  />
-          <span className="icon-label">Pedidos</span>
-        </div>
+        {userRoles.includes("Empleado") && (
+          <div className="icon-wrapper-user-In">
+            <FontAwesomeIcon icon={faWarehouse} onClick={showStock} className="icon-spacing-user-In" />
+            <span className="icon-label">Inventario</span>
+          </div>
+        )}
 
         <div className="icon-wrapper-user-In" onClick={toggleMenu}>
           <FontAwesomeIcon icon={faUser} className="icon-spacing-user-In" />
@@ -663,7 +681,6 @@ const validatePassword = (password) => {
       <span className="icon-label">Inicio</span>
     </div>
 
-    {/* Barra lateral del carrito */}
     <div className={`sidebar-cart ${isCartOpen ? 'active' : ''}`}>
       <center><h3>Comprar</h3></center>
       <CardShop
@@ -678,6 +695,7 @@ const validatePassword = (password) => {
     </div>
   </div>
 );
+
 }
 
 export default UserIn;

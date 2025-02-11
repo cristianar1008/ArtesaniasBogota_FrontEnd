@@ -27,14 +27,7 @@ function Head({ carrito, handleUpdateQuantity, handleRemoveItem }) {
       <div class="logo">
         <img src={logo} alt="Logo" class='logo-image' />
       </div>
-      <div class="search-bar-div">
-        <div class="search-bar">
-            <i class="fas fa-bars"></i>
-            <input type="text" placeholder="Buscar..." />
-            <i class="fas fa-search"></i>
-        </div>
-        
-      </div>
+      
       
     </div>
 

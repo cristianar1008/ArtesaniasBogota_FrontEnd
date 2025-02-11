@@ -22,11 +22,15 @@ const WalletPayment = () => {
       console.error('No se encontró la cookie facturaId');
       return;
     }
-
+     const token = getCookie('token')
+     console.log(token)
     // Llama al backend para generar la preferencia usando el id de la factura
     fetch(`${apiUrl_pago}/api/pagos/crear-preferencia/by-factura/${facturaId}`, {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' ,
+        Authorization: `Bearer ${token}`
+
+      },
     })
       .then((response) => {
         if (!response.ok) {

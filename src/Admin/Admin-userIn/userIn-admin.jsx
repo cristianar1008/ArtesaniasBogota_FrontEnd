@@ -143,22 +143,51 @@ function UserIn_Admin() {
   const showOrder = () =>{
     window.location.href = '/order';
   }
-  return (
-    <div className="user-in-container-user-In">
-      
-    {/* Icono de Home */}
-    
-    {/* Icono de Inventario */}
-    <div className="icon-wrapper-user-In">
-      <FontAwesomeIcon icon={faWarehouse} onClick={showStock} className="icon-spacing-user-In" />
-      <span className="icon-label">Inventario</span>
-    </div>
 
-    {/* Icono de Usuarios */}
-    <div className="icon-wrapper-user-In">
-      <FontAwesomeIcon icon={faUserTie} onClick={redirectToUserAdmin} className="icon-spacing-user-In" />
-      <span className="icon-label">Usuarios</span>
-    </div>
+  const getCookie2 = (cookieName) => {
+    const cookies = document.cookie.split("; ").reduce((acc, current) => {
+        const [key, value] = current.split("=");
+        acc[key] = decodeURIComponent(value || ""); 
+        return acc;
+    }, {});
+    return cookies[cookieName] ? JSON.parse(cookies[cookieName]) : [];
+};
+
+const userRoles = getCookie2("roles");
+return (
+  <div className="user-in-container-user-In">
+    
+    {/* Icono de Inventario (Disponible para Administrador y Empleado) */}
+    {(userRoles.includes("Admin") || userRoles.includes("Empleado")) && (
+      <div className="icon-wrapper-user-In">
+        <FontAwesomeIcon icon={faWarehouse} onClick={showStock} className="icon-spacing-user-In" />
+        <span className="icon-label">Inventario</span>
+      </div>
+    )}
+
+    {/* Icono de Usuarios (Solo para Administrador) */}
+    {userRoles.includes("Admin") && (
+      <div className="icon-wrapper-user-In">
+        <FontAwesomeIcon icon={faUserTie} onClick={redirectToUserAdmin} className="icon-spacing-user-In" />
+        <span className="icon-label">Usuarios</span>
+      </div>
+    )}
+
+    {/* Icono de Reportes (Solo para Administrador) */}
+    {userRoles.includes("Admin") && (
+      <div className="icon-wrapper-user-In">
+        <FontAwesomeIcon icon={faFileAlt} className="icon-spacing-user-In" onClick={showReport} />
+        <span className="icon-label">Reportes</span>
+      </div>
+    )}
+
+    {/* Icono de Pedidos (Solo para Administrador) */}
+    {userRoles.includes("Admin") && (
+      <div className="icon-wrapper-user-In">
+        <FontAwesomeIcon icon={faClipboardList} className="icon-spacing-user-In" onClick={showOrder} />
+        <span className="icon-label">Pedidos</span>
+      </div>
+    )}
 
     {/* Icono de Mi Cuenta */}
     <div className="icon-wrapper-user-In" onClick={toggleMenu}>
@@ -188,26 +217,14 @@ function UserIn_Admin() {
       </div>
     </div>
 
-          {/* Icono de Reportes */}
-          <div className="icon-wrapper-user-In">
-        <FontAwesomeIcon icon={faFileAlt} className="icon-spacing-user-In" onClick={showReport} />
-        <span className="icon-label">Reportes</span>
-      </div>
-
-      {/* Icono de Pedidos */}
-      <div className="icon-wrapper-user-In">
-        <FontAwesomeIcon icon={faClipboardList} className="icon-spacing-user-In" onClick={showOrder}/>
-        <span className="icon-label">Pedidos</span>
-      </div>
-
+    {/* Icono de Inicio */}
     <div className="icon-wrapper-user-In">
       <FontAwesomeIcon icon={faHome} className="icon-spacing-user-In" onClick={() => window.location.href = '/'} />
       <span className="icon-label">Inicio</span>
     </div>
-    
-    
   </div>
-  );
+);
+
 
 }
 export default UserIn_Admin;

@@ -26,6 +26,7 @@ const Bill = () => {
   const [carrito, setCarrito] = useState([]);
 
   const apiUrl_artesanias = import.meta.env.VITE_APP_API_URL_ARTESANIAS;
+  const apiUrl_pagos = import.meta.env.VITE_APP_API_URL_PAGO;
 
   // Cargar datos del usuario y carrito desde las cookies
   useEffect(() => {
@@ -55,13 +56,16 @@ const Bill = () => {
       });
       return;
     }
-
+    const cookies = getCookies();
+    
     try {
       // Crear factura
-      const response = await fetch(`${apiUrl_artesanias}/api/facturas/crear`, {
+      console.log(cookies.token)
+      const response = await fetch(`${apiUrl_pagos}/api/facturas/crear`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${cookies.token}`
         },
         body: JSON.stringify({
           documentoUsuario: documentoUsuario,
@@ -110,11 +114,12 @@ const Bill = () => {
       }));
       console.log("productosFactura")
       console.log(productosFactura)
-  
-      const response = await fetch(`${apiUrl_artesanias}/api/facturas/agregar-productos`, {
+      const cookies = getCookies();
+      const response = await fetch(`${apiUrl_pagos}/api/facturas/agregar-productos`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${cookies.token}`
         },
         body: JSON.stringify(productosFactura),
       });
@@ -142,7 +147,7 @@ const Bill = () => {
         text: "No se pudo registrar los productos en la factura.",
       });
     }
-    window.location.href = 'pago/redirect';
+    // window.location.href = 'pago/redirect';
   };
   
 

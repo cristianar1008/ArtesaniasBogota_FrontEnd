@@ -79,22 +79,37 @@ const AdminUserDataTable = ({ onUserSelect }) => {
 
   // Manejar el cambio de estado del switch
   const handleSwitchChange = (id, isActive) => {
+    const token = getCookie('token');
     const updatedRows = rows.map((row) =>
       row.documento === id ? { ...row, activo: isActive } : row
     );
     setRows(updatedRows); // Actualizar el estado local de los usuarios
 
     // Actualizar el backend con el nuevo estado
-    axios
-      .put(`${apiUrl_artesanias}/api/usuarios/activar?id=${id}`, { activo: isActive })
-      .then(() => {
-        console.log(`Usuario ${id} actualizado a estado ${isActive ? 'Activo' : 'Inactivo'}`);
-      })
-      .catch((error) => {
-        console.error('Error al actualizar el estado del usuario:', error);
-        // Si falla, revertir el cambio en el estado local
-        setRows(rows);
-      });
+    fetch(`${apiUrl_login}/api/usuarios/status/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+             Authorization: `Bearer ${token}`
+          },
+          // body: JSON.stringify({ activo: isActive })
+        })
+        .then(response => {
+          console.log(response)
+          if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+          }
+          
+        })
+        .then(() => {
+        
+          console.log(`Usuario ${id} actualizado a estado ${isActive ? true : false}`);
+        })
+        .catch(error => {
+          console.error( error);
+          // Si falla, revertir el cambio en el estado local
+          setRows(rows);
+        });
   };
 
   // Definir las columnas del DataGrid
@@ -115,8 +130,9 @@ const AdminUserDataTable = ({ onUserSelect }) => {
       headerName: 'Activo',
       flex: 1,
       renderCell: (params) => (
+        
         <Switch
-          checked={params.row.activo}
+          checked={params.row.isActive}
           onChange={(e) => handleSwitchChange(params.row.documento, e.target.checked)}
           color="primary"
         />
