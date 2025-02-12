@@ -22,6 +22,15 @@ function UserIn_Admin() {
     return cookies[name] || null;
   };
 
+  const getCookies2 = () => {
+    const cookies = document.cookie.split("; ").reduce((acc, current) => {
+      const [key, value] = current.split("=");
+      acc[key] = decodeURIComponent(value || ""); // Asegura un valor vacío si no existe.
+      return acc;
+    }, {});
+    return cookies;
+  };
+
   const showUpdatePss = async () => {
     Swal.fire({
         title: 'Actualizar Contraseña',
@@ -62,14 +71,15 @@ function UserIn_Admin() {
     }).then(async (result) => {
         if (result.isConfirmed) {
             const { oldPassword, newPassword } = result.value;
-            const userId = 1001402110; // ID de usuario
+            const cookies = getCookies2();
             const url = `${apiUrl_artesanias}}/api/usuarios/change_password/${getCookie("documento")}`;
 
             try {
                 const response = await fetch(url, {
                     method: 'PUT',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${cookies["token"]}`
                     },
                     body: JSON.stringify({
                         password: oldPassword,

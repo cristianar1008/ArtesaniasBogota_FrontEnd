@@ -59,7 +59,6 @@ function UserIn({ carrito, handleUpdateQuantity, handleRemoveItem }) {
       }).then(async (result) => {
           if (result.isConfirmed) {
               const { oldPassword, newPassword } = result.value;
-              const userId = 1001402110; // ID de usuario
               const cookies = getCookies();
               const url = `${apiUrl_login}}/api/usuarios/change_password/${cookies["documento"]}`;
   
@@ -67,7 +66,8 @@ function UserIn({ carrito, handleUpdateQuantity, handleRemoveItem }) {
                   const response = await fetch(url, {
                       method: 'PUT',
                       headers: {
-                          'Content-Type': 'application/json'
+                          'Content-Type': 'application/json',
+                          Authorization: `Bearer ${cookies["token"]}`
                       },
                       body: JSON.stringify({
                           password: oldPassword,
