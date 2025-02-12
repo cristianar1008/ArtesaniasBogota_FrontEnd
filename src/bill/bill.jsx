@@ -147,7 +147,7 @@ const Bill = () => {
         text: "No se pudo registrar los productos en la factura.",
       });
     }
-    window.location.href = 'pago/redirect';
+    window.location.href = '/redirect';
   };
   
 
