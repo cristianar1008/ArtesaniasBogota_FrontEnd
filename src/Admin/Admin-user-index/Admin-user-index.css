@@ -23,6 +23,8 @@
     border-radius: 5px;
     cursor: pointer;
     text-align: center; /* Alinea el texto dentro del botón */
+    margin-right: 20px; 
+    margin-left: 20px; 
 }
 
 

@@ -149,7 +149,17 @@ const ProductDataTable = ({ onProductSelect }) => {
     });
   };
   
-
+  const getToken = () => {
+    const cookies = document.cookie.split("; ");
+    for (let cookie of cookies) {
+      const [name, value] = cookie.split("=");
+      if (name === "token") {
+        return decodeURIComponent(value);
+      }
+    }
+    return null;
+  };
+  
   // Eliminar producto
   const handleDelete = (facturaId, itemId) => {
     Swal.fire({
@@ -161,18 +171,34 @@ const ProductDataTable = ({ onProductSelect }) => {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        axios
-          .delete(`${apiUrl_artesanias}/api/facturas/remove-item/${facturaId}/${itemId}`)
-          .then(() => {
-            // Actualiza los datos del DataGrid después de eliminar
-            setRows((prevRows) => prevRows.filter((row) => row.id !== itemId));
-            setSelectedProductId(null); // Deselecciona cualquier producto
-            Swal.fire('Eliminado', 'Producto eliminado correctamente.', 'success');
-          })
-          .catch((error) => {
-            console.error('Error al eliminar el producto:', error.response?.data || error.message);
-            Swal.fire('Error', 'No se pudo eliminar el producto.', 'error');
-          });
+        const token = getToken(); // Obtén el token desde las cookies
+
+  if (!token) {
+    Swal.fire("Error", "No se encontró el token de autenticación.", "error");
+    return;
+  }
+
+  try {
+    const response = fetch(`${apiUrl_artesanias}/api/facturas/remove-item/${facturaId}/${itemId}`, {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+
+        // Actualiza los datos del DataGrid después de eliminar
+        setRows((prevRows) => prevRows.filter((row) => row.id !== itemId));
+        setSelectedProductId(null); // Deselecciona cualquier producto
+        Swal.fire("Eliminado", "Producto eliminado correctamente.", "success");
+      } catch (error) {
+        console.error("Error al eliminar el producto:", error.message);
+        Swal.fire("Error", "No se pudo eliminar el producto.", "error");
+      }
       }
     });
   };
@@ -229,7 +255,7 @@ const ProductDataTable = ({ onProductSelect }) => {
       renderCell: (params) => (
         <IconButton
           color="error"
-          onClick={() => handleDelete(params.row.facturaId, params.row.id)} // FacturaId e ItemId desde los datos
+          onClick={() => handleDelete(params.row.id, params.row.id)} // FacturaId e ItemId desde los datos
         >
           <DeleteIcon />
         </IconButton>
@@ -241,17 +267,26 @@ const ProductDataTable = ({ onProductSelect }) => {
   ];
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, padding: 2 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', maxWidth: 800 }}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={showProductModal}
-          disabled={!selectedProductId}
-        >
-          Modificar 
-        </Button>
-      </Box>
+    <Box>
+   <Box sx={{ marginLeft: 30, marginTop: -6.3 }}>
+  <Button
+    variant="contained"
+    className="buttonEdit"
+    onClick={showProductModal}
+    disabled={!selectedProductId}
+    sx={{
+      backgroundColor: "#f1ac13", // Amarillo anaranjado
+      color: "white",
+      "&:hover": { backgroundColor: "#d99210" }, // Un tono más oscuro al pasar el mouse
+      "&:disabled": { backgroundColor: "#f7c66a", color: "#fff" } // Color más claro cuando está deshabilitado
+    }}
+  >
+    Modificar
+  </Button>
+</Box>
+
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, padding: 2 }}>
+      
 
       <TextField
         label="Buscar producto..."
@@ -285,6 +320,7 @@ const ProductDataTable = ({ onProductSelect }) => {
           />
         </Box>
       </Box>
+    </Box>
     </Box>
   );
 };

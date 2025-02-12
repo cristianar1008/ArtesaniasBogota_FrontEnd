@@ -46,13 +46,23 @@ function StockIndex() {
       }
     });
   };
-
+// Función para leer cookies
+const getCookies = () => {
+  const cookies = document.cookie.split("; ").reduce((acc, current) => {
+    const [key, value] = current.split("=");
+    acc[key] = decodeURIComponent(value);
+    return acc;
+  }, {});
+  return cookies;
+};
   // Función para registrar producto
   const handleRegister = (productData) => {
+    const cookies = getCookies();
     fetch(`${apiUrl_artesanias}/api/productos/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${cookies.token}`
       },
       body: JSON.stringify(productData),
     })
